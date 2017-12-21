@@ -51,6 +51,7 @@ const TodoItem = (props) => {//stateless functional component = パフォーマ�
                 <Button 
                     textStyle={styles.textStyle}
                     onPress={onDone}//onPressという名前でButtonにonDone関数を渡す
+                    //doneの値もstateで管理している
                 >
                     {done ? "Undo" : "Done"}
                 </Button>
