@@ -10,10 +10,13 @@ import {
   StyleSheet,
   Text,
   View,
-  FlatList
+  FlatList,
+  Button,
 } from 'react-native';
 import TodoInput from './src/component/TodoInput';
 import TodoItem from './src/component/TodoItem';
+import { StackNavigator } from 'react-navigation';
+import Profile from './src/component/Profile';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' +
@@ -22,6 +25,54 @@ const instructions = Platform.select({
     'Shake or press menu button for dev menu',
 });
 
+//Home画面
+class HomeScreen extends Component {
+  static navigationOptions = {
+    title:'Hu-Hu-Chat!',
+  };
+
+  render() {
+    const { navigate } = this.props.navigation;
+
+    return (
+      <View>
+        <Text>Hello, Chat App!</Text>
+        <Profile/>
+        <Button
+          onPress={() => navigate('Chat',{ user:'Saori' })}
+          title='Saori'
+        />
+      </View>
+    );
+  }
+}
+
+//Chat画面
+class ChatScreen extends Component {
+  static navigationOptions = ({ navigation }) => ({
+    title:`Chat with ${navigation.state.params.user}`,
+  });
+
+  render() {
+
+    const {
+      params,
+    } = this.props.navigation.state;
+
+    return (      
+    <View>
+      <Text>Chat with {params.user}</Text>
+    </View>);
+  }
+}
+
+//screenの管理
+const SimpleApp = StackNavigator({
+  Home: { screen: HomeScreen },
+  Chat: { screen: ChatScreen },
+});
+
+//親コンポーネント
 export default class App extends Component<{}> {
 
   constructor(props){
@@ -57,7 +108,7 @@ export default class App extends Component<{}> {
     const list = [].concat(this.state.list);//this.state.listを[]に連結させる
 
     list.push({
-      key: Date.now(),//ここはkeyという名前でないとダメ
+      key: Date.now(),//FlatListのdataに入れる配列にはkey(一意な値)が無いとダメ
       text: text,
       done: false
     });//listに新しい要素を追加
@@ -76,6 +127,7 @@ export default class App extends Component<{}> {
     } = this.state;
 
     return (
+      <SimpleApp>
       <View style={styles.container}>
         <View style={styles.main}>
           <TodoInput onPressProp={this._onPress}/>
@@ -95,6 +147,7 @@ export default class App extends Component<{}> {
           </View>
         </View>
       </View>
+      </SimpleApp>
     );
   }
 }
