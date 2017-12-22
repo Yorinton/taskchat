@@ -42,6 +42,10 @@ class HomeScreen extends Component {
           onPress={() => navigate('Chat',{ user:'Saori' })}
           title='Saori'
         />
+        <Button
+          onPress={() => navigate('Profile',{ from:'Tokyo',user:'Saori' })}
+          title='Saori'
+        />
       </View>
     );
   }
@@ -66,10 +70,28 @@ class ChatScreen extends Component {
   }
 }
 
+//Profile画面
+class ProfileScreen extends Component {
+  static navigationOptions = ({navigation}) => ({
+    title:`Profile of ${navigation.state.params.user}`,
+  });
+
+  render() {
+    const {
+      params,
+    } = this.props.navigation.state;
+
+    return (
+      <Text>I'm from {params.from}</Text>
+    );
+  }
+}
+
 //screenの管理
 const SimpleApp = StackNavigator({
   Home: { screen: HomeScreen },
   Chat: { screen: ChatScreen },
+  Profile: { screen: ProfileScreen },
 });
 
 //親コンポーネント
