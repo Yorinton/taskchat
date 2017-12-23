@@ -13,6 +13,8 @@ import {
   FlatList,
   Button,
   TextInput,
+  ScrollView,
+  Image,
 } from 'react-native';
 import TodoInput from './src/component/TodoInput';
 import TodoItem from './src/component/TodoItem';
@@ -70,15 +72,20 @@ class ChatScreen extends Component {
     } = this.props.navigation.state;
 
     return (      
-    <View>
+    <ScrollView>
       <Text>Chat with {params.user}</Text>
+        <Image style={{height:400,width:400}} source={{url:'https://peeech.s3.us-east-2.amazonaws.com/profiles/2-1512472489-php1FQ8bH.png'}}/>
+        <Image style={{height:400,width:400}} source={{url:'https://peeech.s3.us-east-2.amazonaws.com/profiles/2-1512472489-php1FQ8bH.png'}}/>
+        <Image style={{height:400,width:400}} source={{url:'https://peeech.s3.us-east-2.amazonaws.com/profiles/2-1512472489-php1FQ8bH.png'}}/>
+        <Image style={{height:400,width:400}} source={{url:'https://peeech.s3.us-east-2.amazonaws.com/profiles/2-1512472489-php1FQ8bH.png'}}/>
+        <Image style={{height:400,width:400}} source={{url:'https://peeech.s3.us-east-2.amazonaws.com/profiles/2-1512472489-php1FQ8bH.png'}}/>
       <TextInput 
           style={{height:40}}
           placeholder="メッセージ入力"
           onChangeText={(text) => this.setState({text})}
       />
       <Text style={{padding: 10, fontSize: 42}}>{this.state.text}</Text>
-    </View>);
+    </ScrollView>);
   }
 }
 
