@@ -12,6 +12,7 @@ import {
   View,
   FlatList,
   Button,
+  TextInput,
 } from 'react-native';
 import TodoInput from './src/component/TodoInput';
 import TodoItem from './src/component/TodoItem';
@@ -57,6 +58,11 @@ class ChatScreen extends Component {
     title:`Chat with ${navigation.state.params.user}`,
   });
 
+  constructor(props){
+    super(props);
+    this.state = {text:''};
+  }
+
   render() {
 
     const {
@@ -66,6 +72,12 @@ class ChatScreen extends Component {
     return (      
     <View>
       <Text>Chat with {params.user}</Text>
+      <TextInput 
+          style={{height:40}}
+          placeholder="メッセージ入力"
+          onChangeText={(text) => this.setState({text})}
+      />
+      <Text style={{padding: 10, fontSize: 42}}>{this.state.text}</Text>
     </View>);
   }
 }

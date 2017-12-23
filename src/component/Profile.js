@@ -48,7 +48,11 @@ export default class Profile extends Component {
 
         return (
             <View>
-                <Image source={pic} style={{width:193,height:100}}/>
+                <View style={{flex:1,flexDirection:'row',justifyContent: 'flex-end',alignItems: 'center'}}>
+                    <Image source={pic} style={{width: 50,height:50}}/>
+                    <Image source={pic} style={{width: 50,height:50}}/>
+                    <Image source={pic} style={{width: 50,height:50}}/>
+                </View>
                 <Name age='30'>里織</Name>
                 <Name age='30'>ヨリヒロ</Name>
             </View>
