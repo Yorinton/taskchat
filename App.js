@@ -20,6 +20,12 @@ import TodoInput from './src/component/TodoInput';
 import TodoItem from './src/component/TodoItem';
 import { StackNavigator } from 'react-navigation';
 import Profile from './src/component/Profile';
+import Home from './src/component/Home';
+import Chat from './src/component/Chat';
+import {
+  Router,
+  Scene,
+} from 'react-native-router-flux';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' +
@@ -168,27 +174,33 @@ export default class App extends Component<{}> {
     } = this.state;
 
     return (
-      <SimpleApp>
-      <View style={styles.container}>
-        <View style={styles.main}>
-          <TodoInput onPressProp={this._onPress}/>
-          <View style={styles.todoListContainer}>
-            <FlatList
-              style={styles.todoList}
-              data={list}//レンダリングしたい配列
-              renderItem={({item,index}) => <TodoItem
-                //item = list,index = listに振られたkey(0,1,2,3...)
-                onDelete={this._delete(index)}
-                onDone={this._done(index)}
-                keyCode={item.key}
-                {...item}//itemは複数になる可能性があるので可変長引数
-               />
-              }//TodoItemコンポーネントの引数にitemを指定
-            />
-          </View>
-        </View>
-      </View>
-      </SimpleApp>
+      <Router>
+        <Scene key='root' style={{paddingTop: Platform.OS === 'ios' ? 64 :54}}>
+          <Scene key='Home' component={Home} title='ホーム'/>
+          <Scene key='Chat' component={Chat} title='チャット'/>          
+        </Scene>
+      </Router>
+      // <SimpleApp>
+      // <View style={styles.container}>
+      //   <View style={styles.main}>
+      //     <TodoInput onPressProp={this._onPress}/>
+      //     <View style={styles.todoListContainer}>
+      //       <FlatList
+      //         style={styles.todoList}
+      //         data={list}//レンダリングしたい配列
+      //         renderItem={({item,index}) => <TodoItem
+      //           //item = list,index = listに振られたkey(0,1,2,3...)
+      //           onDelete={this._delete(index)}
+      //           onDone={this._done(index)}
+      //           keyCode={item.key}
+      //           {...item}//itemは複数になる可能性があるので可変長引数
+      //          />
+      //         }//TodoItemコンポーネントの引数にitemを指定
+      //       />
+      //     </View>
+      //   </View>
+      // </View>
+      // </SimpleApp>
     );
   }
 }
