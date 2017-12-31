@@ -16,8 +16,26 @@ class Backend {
             storageBucket: CONFIG.STORAGE_BUCKET,
             messagingSenderId: CONFIG.MESSAGING_SENDER_ID
         });
+
+        //userのsing-in/outのステータスが変わったタイミングで実行される関数を実装
+        firebase.auth().onAuthStateChanged((user) => {
+            if(user){//userが存在する場合、userのuidをセット
+                this.setUid(user.uid);
+            }else{//userが無い場合は匿名sing-inする
+                firebase.auth().signInAnonymously().catch((error) => {
+                    alert(error.message);
+                });
+            }
+        });
     }
 
+    setUid(uid) {
+        this.uid = uid;
+    }
+
+    getUid() {
+        return this.uid;
+    }
 
     //メッセージの読み込み
     loadMessages(callback) {
