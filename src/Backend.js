@@ -59,7 +59,7 @@ class Backend {
         };
 
         //最新20件のメッセージを取得
-        //指定したイベント(child_added)が発生した時にonReceiveが実行される
+        //参照しているデータに指定したイベント(child_added)が発生した時にonReceiveが実行される
         //onReceiveはDataSnapShotを引数として受け取る
         this.messagesRef.limitToLast(20).on('child_added', onReceive);//limitToLast(20)は無くても大丈夫
     }

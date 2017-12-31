@@ -36,6 +36,7 @@ export default class Chat extends Component {
                     _id: Backend.getUid(),//uidで自分か相手かを判別
                     name: this.props.username,//名前を設定するとアバターに表示される
                 }}
+                isAnimated
             />
         )
     }
