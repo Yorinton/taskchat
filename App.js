@@ -176,7 +176,7 @@ export default class App extends Component<{}> {
     return (
       <Router>
         <Scene key='root' style={{paddingTop: Platform.OS === 'ios' ? 64 :54}}>
-          {/* <Scene key='Home' component={Home} title='ホーム'/> */}
+          <Scene key='Home' component={Home} title='ホーム'/>
           <Scene key='Chat' component={Chat} title='チャット'/>          
         </Scene>
       </Router>

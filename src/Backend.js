@@ -4,6 +4,7 @@ import CONFIG from './Config.js';
 
 class Backend {
 
+    uid = '';
     messageRef = null;
 
     constructor() {
@@ -17,9 +18,11 @@ class Backend {
         });
     }
 
+
     //メッセージの読み込み
     loadMessages(callback) {
-        this.messagesRef = firebase.database().ref('messages');//messagesへの参照を取得
+        //messagesへの参照を取得。この時点でデータベース内にmessagesが無い場合は作る
+        this.messagesRef = firebase.database().ref('messages');
         this.messagesRef.off();//以前アタッチされたコールバックをデタッチする
 
         //読み込んだDataSnapShotから値を取り出し、loadMessagesの引数であるcallbackの引数に設定して実行
@@ -36,10 +39,11 @@ class Backend {
                 },
             });
         };
+
         //最新20件のメッセージを取得
         //指定したイベント(child_added)が発生した時にonReceiveが実行される
         //onReceiveはDataSnapShotを引数として受け取る
-        this.messagesRef.limitToLast(20).on('child_added', onReceive);
+        this.messagesRef.limitToLast(20).on('child_added', onReceive);//limitToLast(20)は無くても大丈夫
     }
 
 

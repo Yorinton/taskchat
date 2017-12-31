@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
 export default class Home extends Component {
 
     state = {
-        txt:'',
+        name:'',
     };
 
     render() {
@@ -45,16 +45,16 @@ export default class Home extends Component {
                     style={styles.nameInput}
                     onChangeText={(text) => {
                         this.setState({
-                            txt:text,
+                            name:text,
                         });
                     }}
-                    value={this.state.txt}
+                    value={this.state.name}
                 />
                 <TouchableOpacity 
                     onPress={() => {
-                        console.log(this.state.txt);
+                        console.log(this.state.name);
                         Actions.Chat({
-                            txt:this.state.txt,//遷移先のコンポーネントでpropsからアクセス出来る
+                            username:this.state.name,//遷移先のコンポーネントでpropsからアクセス出来る
                         });
                     }}
                 >

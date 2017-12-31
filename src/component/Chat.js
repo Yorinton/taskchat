@@ -10,9 +10,20 @@ import Backend from '../Backend.js';
 
 export default class Chat extends Component {
 
+    constructor() {
+        super();
+
+        this.setId();
+    }
+
     state = {
         messages:[],
     };
+
+    setId() {
+        this.uid = (new Date()).getTime();
+        console.log(this.uid);
+    }
 
     componentWillMount() {
 
@@ -32,14 +43,15 @@ export default class Chat extends Component {
                     Backend.sendMessage(message);
                 }}
                 user={{
-                    _id: 1,
-                    name: 'testUser',
+                    _id: this.uid,//uidで自分か相手かを判別
+                    name: this.props.username,
                 }}
             />
         )
     }
     //renderメソッドの内容がレンダリングされた時
     componentDidMount() {
+        //メッセージ読み込みの際に実行するコールバック関数を引数に渡している
         Backend.loadMessages((message) => {//firebaseからロードしてきたmessageをstateのmessagesに追加
             this.setState((previousState) => {//stateを更新 + 再度レンダリング
                 return {
