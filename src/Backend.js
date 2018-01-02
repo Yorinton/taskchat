@@ -17,7 +17,8 @@ class Backend {
             messagingSenderId: CONFIG.MESSAGING_SENDER_ID
         });
 
-        //userのsing-in/outのステータスが変わったタイミングで実行される関数を実装
+        //userのsing-in/outのステータスが変わったタイミングで実行されるオブザーバー(関数)を登録
+        //このオブザーバーは認証状態が変わるたびに呼び出される
         firebase.auth().onAuthStateChanged((user) => {
             if(user){//userが存在する場合、userのuidをセット
                 this.setUid(user.uid);

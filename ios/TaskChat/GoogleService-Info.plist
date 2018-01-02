@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
+	<string>ca-app-pub-3940256099942544/2934735716</string>
+	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
+	<string>ca-app-pub-3940256099942544/4411468910</string>
+	<key>CLIENT_ID</key>
+	<string>221795260663-nbghmbatnkdv2g78o7vlbcaa1jrmqg60.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.221795260663-nbghmbatnkdv2g78o7vlbcaa1jrmqg60</string>
+	<key>API_KEY</key>
+	<string>AIzaSyASSbyARF62IMWOy_8VsWymD1Xu9t4FU2g</string>
+	<key>GCM_SENDER_ID</key>
+	<string>221795260663</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>org.reactjs.native.example.TaskChat</string>
+	<key>PROJECT_ID</key>
+	<string>taskchat-f02af</string>
+	<key>STORAGE_BUCKET</key>
+	<string>taskchat-f02af.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<true></true>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<false></false>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:221795260663:ios:6406b2ccfa9707f7</string>
+	<key>DATABASE_URL</key>
+	<string>https://taskchat-f02af.firebaseio.com</string>
+</dict>
+</plist>
