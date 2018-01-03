@@ -23,6 +23,7 @@ import { StackNavigator } from 'react-navigation';
 import Profile from './src/component/Profile';
 import Home from './src/component/Home';
 import Chat from './src/component/Chat';
+import Tasks from './src/component/Tasks';
 import {
   Router,
   Scene,
@@ -221,7 +222,8 @@ export default class App extends Component<{}> {
       <Router>
         <Scene key='root' style={{paddingTop: Platform.OS === 'ios' ? 64 :54}}>
           <Scene key='Home' component={Home} title='ホーム'/>
-          <Scene key='Chat' component={Chat} title='チャット'/>          
+          <Scene key='Chat' component={Chat} title='チャット'/>     
+          <Scene key='Tasks' component={Tasks} title='タスク一覧'/>     
         </Scene>
       </Router>
       // <SimpleApp>

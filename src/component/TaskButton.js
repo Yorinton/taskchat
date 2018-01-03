@@ -11,7 +11,7 @@ export default class TaskButton extends Component {
         return (
             <View>
                 <TouchableOpacity
-                    onPress={this.props.onPress}
+                    // onPress={this.props._onPress}
                 >
                     <Text>Task</Text>
                 </TouchableOpacity>
