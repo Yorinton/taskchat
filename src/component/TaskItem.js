@@ -16,11 +16,15 @@ export default class TaskItem extends Component {
 
         const {
             text,
+            expire
         } = this.props;
+
+        const expireDate = new Date(expire);
+        const expireText = `期限:${expireDate.getFullYear()}年${expireDate.getMonth() + 1}月${expireDate.getDate()}日${expireDate.getHours()}時${expireDate.getMinutes()}分`;
 
         return(
             <View style={styles.container}>
-                <Text style={styles.text}>{text}</Text>
+                <Text style={styles.text}>{text}/{expireText}</Text>
             </View>
         );
     }

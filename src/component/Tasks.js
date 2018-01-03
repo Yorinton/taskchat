@@ -66,6 +66,7 @@ export default class Tasks extends Component {
                 tasklist.push({
                     key: key,//FlatListのdataに入れる配列にはkey(一意な値)が無いとダメ
                     text: tasks[key].task,
+                    expire: tasks[key].expire,
                     done: false
                 });
             }

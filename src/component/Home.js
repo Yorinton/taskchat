@@ -5,6 +5,8 @@ import {
     TouchableOpacity,
     StyleSheet,
     TextInput,
+    DatePickerIOS,
+    PickerIOS
 } from 'react-native';
 import Chat from './Chat';
 import {
@@ -34,9 +36,11 @@ export default class Home extends Component {
 
     state = {
         name:'',
+        date:new Date()
     };
 
     render() {
+
         return (
             <View>
                 <Text style={styles.title}>Home画面</Text>
@@ -60,6 +64,18 @@ export default class Home extends Component {
                 >
                     <Text style={styles.buttonText}>To Chat</Text>
                 </TouchableOpacity>
+                <DatePickerIOS
+                    date={this.state.date}
+                    onDateChange={(date)=>{
+                        this.setState(()=>{
+                            return{
+                                date:date,
+                            }
+                        });
+                    }}
+                    mode='datetime'
+                    style={styles.picker}
+                />
             </View>
         )
     }
