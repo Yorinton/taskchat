@@ -2,11 +2,21 @@ import React, {Component} from 'react';
 import {
     View,
     Text,
+    Modal,
+    StyleSheet,
+    TouchableOpacity,
+    TextInput
 } from 'react-native';
 import {
     GiftedChat
 } from 'react-native-gifted-chat';
 import Backend from '../Backend.js';
+import TaskButton from './TaskButton';
+import {
+    Actions
+} from 'react-native-router-flux';
+import Home from './Home';
+import TaskRegister from './TaskRegister';
 
 export default class Chat extends Component {
 
@@ -16,7 +26,9 @@ export default class Chat extends Component {
 
 
     componentWillMount() {
-
+        this.setState({
+            visibleModal:false,
+        });
     }
 
     // onSend = (messages = []) => {
@@ -36,10 +48,62 @@ export default class Chat extends Component {
                     _id: Backend.getUid(),//uidで自分か相手かを判別
                     name: this.props.username,//名前を設定するとアバターに表示される
                 }}
-                isAnimated
-            />
-        )
+                // renderActions={()=>this.renderActions()}
+                onPressActionButton={()=>this.renderModal()}
+                //GiftChatのchildに設定された要素は「Send」ボタンを代替する
+                // renderAccessory={()=>this.renderTab()}
+            >
+                <Text>Send</Text>
+                <TouchableOpacity
+                        onPress={()=>{
+                                Actions.Tasks();
+                            }
+                        }
+                    >
+                        <Text>タスク</Text>
+                </TouchableOpacity>
+                <Modal
+                    //別コンポーネントに切り出す
+                    visible={this.state.visibleModal}
+                    transparent={false}
+                    animationType={'fade'}
+                >
+                <TaskRegister
+                        onPress={()=>{
+                            this.setState({
+                                visibleModal:false
+                            })
+                        }}
+                />
+                </Modal>
+            </GiftedChat>
+        );
     }
+
+    cancel() {
+        this.setState(()=>{
+            return {
+                visibleModal: false
+            };
+        });
+    }
+
+    renderModal(){
+        this.setState({
+            visibleModal: true
+        });
+    }
+
+    renderActions() {
+        return (
+            <TaskButton
+                _onPress={()=>this.setState({
+                    visibleModal:true
+                })}
+            />
+        );
+    }
+
     //renderメソッドの内容がレンダリングされた時
     componentDidMount() {
         //メッセージ読み込みの際に実行するコールバック関数を引数に渡している
@@ -58,3 +122,24 @@ export default class Chat extends Component {
 
     }
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex:1,
+        flexDirection:'column',
+        justifyContent:'center',
+        alignItems:'center',
+    },
+    // modal: {
+    //     fontSize:20,
+    // },
+    // textInput: {
+    //     height:50,
+    //     backgroundColor: '#FFF',
+    // },
+    // buttons: {
+    //     flex:1,
+    //     flexDirection:'row',
+    //     justifyContent:'space-between',
+    // }
+});

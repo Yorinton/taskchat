@@ -6,6 +6,7 @@ class Backend {
 
     uid = '';
     messageRef = null;
+    tasksRef = null;
 
     constructor() {
         firebase.initializeApp({
@@ -17,7 +18,8 @@ class Backend {
             messagingSenderId: CONFIG.MESSAGING_SENDER_ID
         });
 
-        //userのsing-in/outのステータスが変わったタイミングで実行される関数を実装
+        //userのsing-in/outのステータスが変わったタイミングで実行されるオブザーバー(関数)を登録
+        //このオブザーバーは認証状態が変わるたびに呼び出される
         firebase.auth().onAuthStateChanged((user) => {
             if(user){//userが存在する場合、userのuidをセット
                 this.setUid(user.uid);
@@ -76,6 +78,32 @@ class Backend {
         }
     }
 
+    //タスク書き込み
+    registerTask(task){
+        this.tasksRef = firebase.database().ref('tasks');
+        this.tasksRef.off();//これをやらないとTasksコンポーネントのマウント前にsetStateが実行されてしまう
+        this.tasksRef.push({
+            task: task.text,
+            createdAt: firebase.database.ServerValue.TIMESTAMP,
+        });
+    }
+
+    readTasks(callback){
+        this.tasksRef = firebase.database().ref('tasks');
+        this.tasksRef.off();
+
+        const onReceive = (dataSnapShot) => {
+            const tasks = dataSnapShot.val();
+            callback(tasks);
+        }
+
+        this.tasksRef.on('value',onReceive);
+    }
+
+    // detatchTaskRef(){
+    //     this.tasksRef = firebase.database().ref('tasks');
+    //     this.tasksRef.off();
+    // }
 }
 
 export default new Backend();

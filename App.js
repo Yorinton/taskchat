@@ -15,6 +15,7 @@ import {
   TextInput,
   ScrollView,
   Image,
+  Clipboard,
 } from 'react-native';
 import TodoInput from './src/component/TodoInput';
 import TodoItem from './src/component/TodoItem';
@@ -22,10 +23,16 @@ import { StackNavigator } from 'react-navigation';
 import Profile from './src/component/Profile';
 import Home from './src/component/Home';
 import Chat from './src/component/Chat';
+import Tasks from './src/component/Tasks';
 import {
   Router,
   Scene,
 } from 'react-native-router-flux';
+import FCM from 'react-native-fcm';
+// import {registerKilledListener, registerAppListener} from "./Listeners";
+// import firebaseClient from  "./FirebaseClient";
+
+// registerKilledListener();
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' +
@@ -126,45 +133,83 @@ export default class App extends Component<{}> {
     super(props);
 
     this.state = {
-      list:[],//listという名前で配列を初期化
+      token:"",
+      tokenCopyFeedback:"",
+      // list:[],//listという名前で配列を初期化
     };//オブジェクトリテラル
   }
 
 
-  _delete = (index) => () => {
-    const list = [].concat(this.state.list);
-    list.splice(index,1);//keyがindexの要素を１つ削除する
+  // _delete = (index) => () => {
+  //   const list = [].concat(this.state.list);
+  //   list.splice(index,1);//keyがindexの要素を１つ削除する
 
-    console.log(index);
-    this.setState({
-      list,
-    });
-  }
+  //   console.log(index);
+  //   this.setState({
+  //     list,
+  //   });
+  // }
 
-  _done = (index) => () => {
-    const list = [].concat(this.state.list);
-    list[index].done = !list[index].done;//keyがindexの要素のdoneの値(true/false)を反転させる
+  // _done = (index) => () => {
+  //   const list = [].concat(this.state.list);
+  //   list[index].done = !list[index].done;//keyがindexの要素のdoneの値(true/false)を反転させる
 
-    this.setState({
-      list,
-    });
-  }
+  //   this.setState({
+  //     list,
+  //   });
+  // }
 
-  _onPress = (text) => {
+  // _onPress = (text) => {
 
-    const list = [].concat(this.state.list);//this.state.listを[]に連結させる
+  //   const list = [].concat(this.state.list);//this.state.listを[]に連結させる
 
-    list.push({
-      key: Date.now(),//FlatListのdataに入れる配列にはkey(一意な値)が無いとダメ
-      text: text,
-      done: false
-    });//listに新しい要素を追加
+  //   list.push({
+  //     key: Date.now(),//FlatListのdataに入れる配列にはkey(一意な値)が無いとダメ
+  //     text: text,
+  //     done: false
+  //   });//listに新しい要素を追加
 
-    this.setState({//stateを変更して再度renderメソッドを走らせる
-      list,
-    });
+  //   this.setState({//stateを変更して再度renderメソッドを走らせる
+  //     list,
+  //   });
 
-  }
+  // }
+
+  //コンポーネントがマウントされた時の処理(トークン取得や通知許可等)
+  // async componentDidMount() {
+  //   //Listnerを登録
+  //   registerAppListener();
+
+  //   //
+  //   FCM.getInitialNotification().then(notif => {
+  //     this.setState({
+  //       initNotif: notif,
+  //     })
+  //   });
+
+  //   //初回起動時にユーザーに通知の許可をもらう
+  //   try {
+  //     let result = await FCM.requestPermissions({badge:false,sound:true,alert:true});
+  //   }catch(e){
+  //     console.log(e);
+  //   }
+
+  //   //FCMトークンの取得
+  //   FCM.getFCMToken().then(token => {
+  //     console.log("TOKEN (getFCMToken)", token);
+  //     this.setState({
+  //       token: token || "",
+  //     })
+  //   });
+
+  //   //APNsトークンの取得
+  //   if(Platform.OS === "ios"){
+  //     FCM.getAPNSToken().then(token => {
+  //       console.log("APNS TOKEN (getFCMToken)", token);
+  //     });
+  //   }
+
+  // }
 
   //onPress2という名前でthis.displayという関数を子コンポーネントに送っている
   render() {
@@ -177,7 +222,8 @@ export default class App extends Component<{}> {
       <Router>
         <Scene key='root' style={{paddingTop: Platform.OS === 'ios' ? 64 :54}}>
           <Scene key='Home' component={Home} title='ホーム'/>
-          <Scene key='Chat' component={Chat} title='チャット'/>          
+          <Scene key='Chat' component={Chat} title='チャット'/>     
+          <Scene key='Tasks' component={Tasks} title='タスク一覧'/>     
         </Scene>
       </Router>
       // <SimpleApp>
