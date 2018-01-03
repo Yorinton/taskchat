@@ -10,7 +10,9 @@ export default class TaskButton extends Component {
     render() {
         return (
             <View>
-                <TouchableOpacity>
+                <TouchableOpacity
+                    onPress={this.props.onPress}
+                >
                     <Text>Task</Text>
                 </TouchableOpacity>
             </View>

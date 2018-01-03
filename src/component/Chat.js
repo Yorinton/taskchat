@@ -71,16 +71,7 @@ export default class Chat extends Component {
         );
     }
 
-    displayTaskRegister() {
-        this.setState(()=>{
-            return {
-                visibleModal: true
-            }
-        })
-    }
-
     cancel() {
-        console.log(this.state.visibleModal);
         this.setState(()=>{
             return {
                 visibleModal: false
@@ -90,13 +81,21 @@ export default class Chat extends Component {
 
     renderChatFooter() {
         return (
-            <TaskButton/>
+            <TaskButton
+                onPress={()=>this.setState({
+                    visibleModal:true
+                })}
+            />
         );
     }
 
     renderActions() {
         return (
-            <TaskButton/>
+            <TaskButton
+                onPress={()=>this.setState({
+                    visibleModal:true
+                })}
+            />
         );
     }
     //renderメソッドの内容がレンダリングされた時
