@@ -81,6 +81,7 @@ class Backend {
     //タスク書き込み
     registerTask(task){
         this.tasksRef = firebase.database().ref('tasks');
+        this.tasksRef.off();//これをやらないとTasksコンポーネントのマウント前にsetStateが実行されてしまう
         this.tasksRef.push({
             task: task.text,
             createdAt: firebase.database.ServerValue.TIMESTAMP,
@@ -89,7 +90,7 @@ class Backend {
 
     readTasks(callback){
         this.tasksRef = firebase.database().ref('tasks');
-        this.messagesRef.off();
+        this.tasksRef.off();
 
         const onReceive = (dataSnapShot) => {
             const tasks = dataSnapShot.val();
@@ -98,6 +99,11 @@ class Backend {
 
         this.tasksRef.on('value',onReceive);
     }
+
+    // detatchTaskRef(){
+    //     this.tasksRef = firebase.database().ref('tasks');
+    //     this.tasksRef.off();
+    // }
 }
 
 export default new Backend();

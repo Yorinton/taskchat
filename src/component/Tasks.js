@@ -20,7 +20,7 @@ export default class Tasks extends Component {
         super(props);
 
         this.state = {
-            tasks2:[]
+            tasklist:[]
         };
     }
 
@@ -49,7 +49,7 @@ export default class Tasks extends Component {
                     <Text>チャット</Text>
                 </TouchableOpacity>
                 <FlatList
-                    data={this.state.tasks2}//レンダリングしたい配列
+                    data={this.state.tasklist}//レンダリングしたい配列
                     renderItem={({item}) => <TaskItem
                         {...item}
                     />
@@ -60,10 +60,10 @@ export default class Tasks extends Component {
     }
     componentDidMount(){
         Backend.readTasks((tasks)=>{
-            const tasks2 = [].concat(this.state.tasks2);
+            const tasklist = [].concat(this.state.tasklist);
 
             for(var key in tasks){
-                tasks2.push({
+                tasklist.push({
                     key: key,//FlatListのdataに入れる配列にはkey(一意な値)が無いとダメ
                     text: tasks[key].task,
                     done: false
@@ -71,21 +71,8 @@ export default class Tasks extends Component {
             }
 
             this.setState({
-                tasks2,
+                tasklist,
             })
         });
-        // for(var key in tasks){
-        //     const tasks2 = [].concat(this.state.tasks2);//this.state.listを[]に連結させる
-
-        //     tasks2.push({
-        //         key: Date.now(),//FlatListのdataに入れる配列にはkey(一意な値)が無いとダメ
-        //         text: tasks[key].task,
-        //         done: false
-        //     });//listに新しい要素を追加
-        // }
-        // this.setState({//stateを変更して再度renderメソッドを走らせる
-        //     tasks2,
-        // });
-        // console.log(this.state);
     }
 }
