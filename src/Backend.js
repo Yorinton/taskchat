@@ -6,6 +6,7 @@ class Backend {
 
     uid = '';
     messageRef = null;
+    tasksRef = null;
 
     constructor() {
         firebase.initializeApp({
@@ -77,6 +78,26 @@ class Backend {
         }
     }
 
+    //タスク書き込み
+    registerTask(task){
+        this.tasksRef = firebase.database().ref('tasks');
+        this.tasksRef.push({
+            task: task.text,
+            createdAt: firebase.database.ServerValue.TIMESTAMP,
+        });
+    }
+
+    readTasks(callback){
+        this.tasksRef = firebase.database().ref('tasks');
+        this.messagesRef.off();
+
+        const onReceive = (dataSnapShot) => {
+            const tasks = dataSnapShot.val();
+            callback(tasks);
+        }
+
+        this.tasksRef.on('value',onReceive);
+    }
 }
 
 export default new Backend();

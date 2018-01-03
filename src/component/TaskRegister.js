@@ -7,27 +7,49 @@ import {
     TouchableOpacity,
     TextInput
 } from 'react-native';
+import Backend from '../Backend.js';
 
 export default class TaskRegister extends Component {
+
+    constructor(props) {
+        super(props)
+
+        this.ref = {};
+
+        this.task = {
+            text:'',
+        };
+    }
+
     render(){
         return (
             <View style={styles.container}>
                 <TextInput
                     style={styles.textInput}
                     placeholder='タスク入力'
+                    ref={(input)=>{this.ref = input;}}
                 ></TextInput>
-                <View style={styles.buttons}>
-                    <TouchableOpacity>
-                        <Text>register</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={()=>this.props.onPress()}
-                    >
-                        <Text>cancel</Text>
-                    </TouchableOpacity>
-                </View>
+                <TouchableOpacity
+                    onPress={()=>this.registerTask()}
+                >
+                    <Text>register</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={()=>this.props.onPress()}
+                >
+                    <Text>cancel</Text>
+                </TouchableOpacity>
             </View>
         );
+    }
+
+    registerTask(){
+        if(this.ref._lastNativeText){
+            this.task['text'] = this.ref._lastNativeText;
+            Backend.registerTask(this.task);
+            console.log(this.task);
+            this.ref.setNativeProps({text:''});
+        }
     }
 }
 
