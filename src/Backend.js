@@ -84,6 +84,7 @@ class Backend {
         this.tasksRef.off();//これをやらないとTasksコンポーネントのマウント前にsetStateが実行されてしまう
         this.tasksRef.push({
             task: task.text,
+            expire: task.expire,
             createdAt: firebase.database.ServerValue.TIMESTAMP,
         });
     }
@@ -97,7 +98,7 @@ class Backend {
             callback(tasks);
         }
 
-        this.tasksRef.on('value',onReceive);
+        this.tasksRef.orderByChild('expire').on('value',onReceive);
     }
 
     // detatchTaskRef(){

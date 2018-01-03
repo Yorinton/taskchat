@@ -5,7 +5,8 @@ import {
     Modal,
     StyleSheet,
     TouchableOpacity,
-    TextInput
+    TextInput,
+    DatePickerIOS
 } from 'react-native';
 import Backend from '../Backend.js';
 
@@ -18,17 +19,35 @@ export default class TaskRegister extends Component {
 
         this.task = {
             text:'',
+            expire:this.state.date.getTime()
         };
     }
 
+    state = {
+        date:new Date()
+    };
+
     render(){
+
         return (
             <View style={styles.container}>
                 <TextInput
                     style={styles.textInput}
                     placeholder='タスク入力'
                     ref={(input)=>{this.ref = input;}}
-                ></TextInput>
+                />
+                <DatePickerIOS
+                    date={this.state.date}
+                    onDateChange={(date)=>{
+                        this.setState(()=>{
+                            return{
+                                date:date,
+                            }
+                        });
+                    }}
+                    mode='datetime'
+                    style={styles.picker}
+                />
                 <TouchableOpacity
                     onPress={()=>this.registerTask()}
                 >
@@ -46,8 +65,8 @@ export default class TaskRegister extends Component {
     registerTask(){
         if(this.ref._lastNativeText){
             this.task['text'] = this.ref._lastNativeText;
+            this.task['expire'] = this.state.date.getTime();
             Backend.registerTask(this.task);
-            console.log(this.task);
             this.ref.setNativeProps({text:''});
         }
     }
@@ -60,6 +79,9 @@ const styles = StyleSheet.create({
         justifyContent:'center',
         alignItems:'center',
     },
+    picker: {
+        width:300,
+    }
     // modal: {
     //     fontSize:20,
     // },
