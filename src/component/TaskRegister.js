@@ -17,9 +17,13 @@ export default class TaskRegister extends Component {
 
         this.ref = {};
 
+        this.ref_res = {};
+
         this.task = {
             text:'',
-            expire:this.state.date.getTime()
+            expire:this.state.date.getTime(),
+            responsible:'',
+            done:false
         };
     }
 
@@ -48,6 +52,11 @@ export default class TaskRegister extends Component {
                     mode='datetime'
                     style={styles.picker}
                 />
+                <TextInput
+                    style={styles.textInput}
+                    placeholder='担当者'
+                    ref={(input)=>{this.ref_res = input;}}
+                />
                 <TouchableOpacity
                     onPress={()=>this.registerTask()}
                 >
@@ -63,9 +72,10 @@ export default class TaskRegister extends Component {
     }
 
     registerTask(){
-        if(this.ref._lastNativeText){
+        if(this.ref._lastNativeText && this.ref_res._lastNativeText){
             this.task['text'] = this.ref._lastNativeText;
             this.task['expire'] = this.state.date.getTime();
+            this.task['responsible'] = this.ref_res._lastNativeText;
             Backend.registerTask(this.task);
             this.ref.setNativeProps({text:''});
         }

@@ -10,7 +10,8 @@ import {
 } from 'react-native';
 import Chat from './Chat';
 import {
-    Actions
+    Actions,
+    ActionConst
 } from 'react-native-router-flux';
 
 const styles = StyleSheet.create({
@@ -58,6 +59,7 @@ export default class Home extends Component {
                     onPress={() => {
                         console.log(this.state.name);
                         Actions.Chat({
+                            type: ActionConst.PUSH_OR_POP,
                             username:this.state.name,//遷移先のコンポーネントでpropsからアクセス出来る
                         });
                     }}

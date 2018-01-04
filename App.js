@@ -27,6 +27,7 @@ import Tasks from './src/component/Tasks';
 import {
   Router,
   Scene,
+  Tabs
 } from 'react-native-router-flux';
 import FCM from 'react-native-fcm';
 // import {registerKilledListener, registerAppListener} from "./Listeners";
@@ -221,11 +222,18 @@ export default class App extends Component<{}> {
     return (
       <Router>
         <Scene key='root' style={{paddingTop: Platform.OS === 'ios' ? 64 :54}}>
-          <Scene key='Home' component={Home} title='ホーム'/>
+          {/* <Scene key='Home' component={Home} title='ホーム'/> */}
           <Scene key='Chat' component={Chat} title='チャット'/>     
           <Scene key='Tasks' component={Tasks} title='タスク一覧'/>     
         </Scene>
       </Router>
+      // <Router>
+      //   <Tabs key='root' style={{paddingTop: Platform.OS === 'ios' ? 64 :54}}>
+      //     <Scene key='Home' component={Home} title='ホーム' tabBarLabel='home'/>
+      //     <Scene key='Chat' component={Chat} title='チャット' tabBarLabel='chat'/>     
+      //     <Scene key='Tasks' component={Tasks} title='タスク一覧' tabBarLabel='task'/>     
+      //   </Tabs>
+      // </Router>
       // <SimpleApp>
       // <View style={styles.container}>
       //   <View style={styles.main}>
