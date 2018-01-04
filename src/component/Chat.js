@@ -6,7 +6,8 @@ import {
     StyleSheet,
     TouchableOpacity,
     TextInput,
-    FlatList
+    FlatList,
+    Platform
 } from 'react-native';
 import {
     GiftedChat
@@ -14,6 +15,8 @@ import {
 import Backend from '../Backend.js';
 import TaskButton from './TaskButton';
 import {
+    Router,
+    Scene,
     Actions,
     ActionConst
 } from 'react-native-router-flux';
@@ -38,13 +41,24 @@ export default class Chat extends Component {
         this.setState({
             visibleModal:false,
         });
-    }
 
-    // onSend = (messages = []) => {
-    //     this.setState((previousState) => ({
-    //         messages: GiftedChat.append(previousState.messages, messages),
-    //     }));
-    // }
+        Backend.readTasksLimit((tasks)=>{
+            const tasklist = [].concat(this.state.tasklist);
+
+            for(var key in tasks){
+                tasklist.push({
+                    key: key,//FlatListのdataに入れる配列にはkey(一意な値)が無いとダメ
+                    text: tasks[key].task,
+                    expire: tasks[key].expire,
+                    responsible: tasks[key].responsible,
+                    done: tasks[key].done
+                });
+            }
+            this.setState({
+                tasklist,
+            });
+        },2);
+    }
 
     render() {
         return (
@@ -55,19 +69,19 @@ export default class Chat extends Component {
                 }}
                 user={{
                     _id: Backend.getUid(),//uidで自分か相手かを判別
-                    name: this.props.username,//名前を設定するとアバターに表示される
+                    // name: this.props.username,//名前を設定するとアバターに表示される
                 }}
                 // renderActions={()=>this.renderActions()}
                 onPressActionButton={()=>this.renderModal()}
                 //GiftChatのchildに設定された要素は「Send」ボタンを代替する
-                // renderAccessory={()=>this.renderTab()}
+                renderAccessory={()=>this.renderTab()}
                 tasklist={this.state.tasklist}
                 renderOtherComponent={()=>this.renderTask()}
             >
                 <Text>Send</Text>
                 <TouchableOpacity
                         onPress={()=>{
-                                Actions.Tasks();
+                                Actions.Tasks({type:ActionConst.PUSH_OR_POP});
                             }
                         }
                     >
@@ -114,45 +128,82 @@ export default class Chat extends Component {
             />
         );
     }
-    renderTask() {
-        console.log(this.state.tasklist);
+
+    renderTab() {
         return (
-            <View>
-                <FlatList
-                    data={this.state.tasklist}//レンダリングしたい配列
-                    renderItem={({item,index}) => <TaskItem
-                        {...item}
-                        onDone={this._done(index,item.key)}
-                        onDelete={this._delete(index,item.key)}
-                    />
-                    }//TodoItemコンポーネントの引数にitemを指定
-                />
-            </View>
+            <TouchableOpacity
+                onPress={()=>{
+                    Actions.Tasks();
+                }}
+            >
+                <Text>タスク一覧</Text>
+            </TouchableOpacity>
         );
     }
 
-    _delete = (index,key) => () => {
-        const tasklist = [].concat(this.state.tasklist);
-        tasklist.splice(index,1);//keyがindexの要素を１つ削除する
+    renderTask() {
+        if(this.state.tasklist.length > 0){
+            return (
+                <View>
+                    <TouchableOpacity
+                        onPress={()=>{
+                            Actions.Tasks();
+                        }}
+                    >                    
+                        <Text>未完了タスクあり/{this.state.tasklist.length}件</Text>
+                        <FlatList
+                            data={this.state.tasklist}//レンダリングしたい配列
+                            renderItem={({item,index}) => <TaskItem
+                                {...item}
+                            />
+                            }//TodoItemコンポーネントの引数にitemを指定
+                        />
+                    </TouchableOpacity>    
+                </View>
+            );
+        }
 
-        Backend.deleteTask(key);
-
-        this.setState({
-            tasklist,
-        });
+        // if(this.state.tasklist.length > 0){
+        //     return(
+        //         // <Router>
+        //         //     <Scene key='root' style={{paddingTop: Platform.OS === 'ios' ? 64 :54}}>
+        //         //     {/* <Scene key='Home' component={Home} title='ホーム'/> */}
+        //         //         {/* <Scene key='Chat' component={Chat} title='チャット'/>      */}
+        //         //         <Scene key='Tasks' component={Tasks} title='タスク一覧'/>     
+        //         //     </Scene>
+        //         // </Router>                
+        //         <TouchableOpacity
+        //             onPress={()=>{
+        //                 Actions.Tasks();
+        //             }}
+        //         >
+        //             <Text>未完了タスクあり</Text>
+        //         </TouchableOpacity>
+        //     );
+        // }
     }
 
-    _done = (index,key) => () => {
-        const tasklist = [].concat(this.state.tasklist);
-        tasklist[index].done = !tasklist[index].done;//keyがindexの要素のdoneの値(true/false)を反転させる
+    // _delete = (index,key) => () => {
+    //     const tasklist = [].concat(this.state.tasklist);
+    //     tasklist.splice(index,1);//keyがindexの要素を１つ削除する
 
-        console.log(key);
-        Backend.changeTaskStatus(key,tasklist[index].done);
+    //     Backend.deleteTask(key);
 
-        this.setState({
-            tasklist,
-        });
-    }
+    //     this.setState({
+    //         tasklist,
+    //     });
+    // }
+
+    // _done = (index,key) => () => {
+    //     const tasklist = [].concat(this.state.tasklist);
+    //     tasklist[index].done = !tasklist[index].done;//keyがindexの要素のdoneの値(true/false)を反転させる
+
+    //     Backend.changeTaskStatus(key,tasklist[index].done);
+
+    //     this.setState({
+    //         tasklist,
+    //     });
+    // }
 
     //renderメソッドの内容がレンダリングされた時
     componentDidMount() {
@@ -165,23 +216,6 @@ export default class Chat extends Component {
                 };
             });
         });
-
-        Backend.readTasksLimit((tasks)=>{
-            const tasklist = [].concat(this.state.tasklist);
-
-            for(var key in tasks){
-                tasklist.push({
-                    key: key,//FlatListのdataに入れる配列にはkey(一意な値)が無いとダメ
-                    text: tasks[key].task,
-                    expire: tasks[key].expire,
-                    responsible: tasks[key].responsible,
-                    done: false
-                });
-            }
-            this.setState({
-                tasklist,
-            });
-        },2);
     }
 
     //別ページに遷移した時

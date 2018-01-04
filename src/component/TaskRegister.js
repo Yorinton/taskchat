@@ -72,7 +72,7 @@ export default class TaskRegister extends Component {
     }
 
     registerTask(){
-        if(this.ref._lastNativeText){
+        if(this.ref._lastNativeText && this.ref_res._lastNativeText){
             this.task['text'] = this.ref._lastNativeText;
             this.task['expire'] = this.state.date.getTime();
             this.task['responsible'] = this.ref_res._lastNativeText;

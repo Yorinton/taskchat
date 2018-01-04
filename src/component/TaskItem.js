@@ -27,22 +27,29 @@ export default class TaskItem extends Component {
         const expireText = `期限:${expireDate.getFullYear()}年${expireDate.getMonth() + 1}月${expireDate.getDate()}日${expireDate.getHours()}時${expireDate.getMinutes()}分`;
         const responsibleText = `担当:${responsible}`;
 
+        if(onDelete && onDone){
+            return(
+                <View style={styles.container}>
+                    <Text style={styles.text}>{text}{"\n"}{expireText}{"\n"}{responsibleText}</Text>
+                    <Button 
+                        textStyle={styles.textStyle}
+                        onPress={onDone}//onPressという名前でButtonにonDone関数を渡す
+                        //doneの値もstateで管理している
+                    >
+                        {done ? "Undo" : "Done"}
+                    </Button>
+                    <Button 
+                        style={styles.deleteButton}
+                        onPress={onDelete}
+                    >
+                        Delete
+                    </Button>
+                </View>
+            );
+        }
         return(
             <View style={styles.container}>
                 <Text style={styles.text}>{text}{"\n"}{expireText}{"\n"}{responsibleText}</Text>
-                <Button 
-                    textStyle={styles.textStyle}
-                    onPress={onDone}//onPressという名前でButtonにonDone関数を渡す
-                    //doneの値もstateで管理している
-                >
-                    {done ? "Undo" : "Done"}
-                </Button>
-                <Button 
-                    style={styles.deleteButton}
-                    onPress={onDelete}
-                >
-                    Delete
-                </Button>
             </View>
         );
     }

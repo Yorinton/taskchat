@@ -40,7 +40,6 @@ export default class Tasks extends Component {
         tasklist[index].done = !tasklist[index].done;//keyがindexの要素のdoneの値(true/false)を反転させる
 
         console.log(key);
-        console.log(tasklist[index].done);
         Backend.changeTaskStatus(key,tasklist[index].done);
 
         this.setState({
@@ -94,7 +93,7 @@ export default class Tasks extends Component {
                     text: tasks[key].task,
                     expire: tasks[key].expire,
                     responsible: tasks[key].responsible,
-                    done: false
+                    done: tasks[key].done
                 });
             }
 
