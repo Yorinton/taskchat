@@ -162,48 +162,7 @@ export default class Chat extends Component {
                 </View>
             );
         }
-
-        // if(this.state.tasklist.length > 0){
-        //     return(
-        //         // <Router>
-        //         //     <Scene key='root' style={{paddingTop: Platform.OS === 'ios' ? 64 :54}}>
-        //         //     {/* <Scene key='Home' component={Home} title='ホーム'/> */}
-        //         //         {/* <Scene key='Chat' component={Chat} title='チャット'/>      */}
-        //         //         <Scene key='Tasks' component={Tasks} title='タスク一覧'/>     
-        //         //     </Scene>
-        //         // </Router>                
-        //         <TouchableOpacity
-        //             onPress={()=>{
-        //                 Actions.Tasks();
-        //             }}
-        //         >
-        //             <Text>未完了タスクあり</Text>
-        //         </TouchableOpacity>
-        //     );
-        // }
     }
-
-    // _delete = (index,key) => () => {
-    //     const tasklist = [].concat(this.state.tasklist);
-    //     tasklist.splice(index,1);//keyがindexの要素を１つ削除する
-
-    //     Backend.deleteTask(key);
-
-    //     this.setState({
-    //         tasklist,
-    //     });
-    // }
-
-    // _done = (index,key) => () => {
-    //     const tasklist = [].concat(this.state.tasklist);
-    //     tasklist[index].done = !tasklist[index].done;//keyがindexの要素のdoneの値(true/false)を反転させる
-
-    //     Backend.changeTaskStatus(key,tasklist[index].done);
-
-    //     this.setState({
-    //         tasklist,
-    //     });
-    // }
 
     //renderメソッドの内容がレンダリングされた時
     componentDidMount() {

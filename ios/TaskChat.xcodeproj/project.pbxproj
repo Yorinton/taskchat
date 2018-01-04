@@ -368,6 +368,7 @@
 		CE345B905E23B6D02BA12727 /* libPods-TaskChat-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TaskChat-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0FB91ED94254F24A54791D7 /* libRNFIRMessaging.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNFIRMessaging.a; sourceTree = "<group>"; };
 		F41B983C4AB6BC5AB4AEB272 /* Pods-TaskChat-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TaskChat-tvOSTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TaskChat-tvOSTests/Pods-TaskChat-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		F802D2711FFE80690047A55E /* TaskChat.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = TaskChat.entitlements; path = TaskChat/TaskChat.entitlements; sourceTree = "<group>"; };
 		F84EFC1C1FFB86DE00FCFB75 /* RCTPushNotification.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTPushNotification.xcodeproj; path = "../node_modules/react-native/Libraries/PushNotificationIOS/RCTPushNotification.xcodeproj"; sourceTree = "<group>"; };
 		F84EFC691FFB971300FCFB75 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Desktop/iPhoneアプリ開発/firebase/GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -513,6 +514,7 @@
 		13B07FAE1A68108700A75B9A /* TaskChat */ = {
 			isa = PBXGroup;
 			children = (
+				F802D2711FFE80690047A55E /* TaskChat.entitlements */,
 				F84EFC691FFB971300FCFB75 /* GoogleService-Info.plist */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -783,6 +785,11 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = 288FJNS6BL;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -1525,6 +1532,7 @@
 			baseConfigurationReference = 6FBFC4997219D8248B6A1BD5 /* Pods-TaskChat.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = TaskChat/TaskChat.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 288FJNS6BL;
@@ -1554,6 +1562,7 @@
 			baseConfigurationReference = 0A0351C888F0A1E8961097FB /* Pods-TaskChat.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = TaskChat/TaskChat.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 288FJNS6BL;
 				HEADER_SEARCH_PATHS = (
