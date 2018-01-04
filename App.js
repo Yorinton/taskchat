@@ -16,6 +16,7 @@ import {
   ScrollView,
   Image,
   Clipboard,
+  TouchableOpacity
 } from 'react-native';
 import TodoInput from './src/component/TodoInput';
 import TodoItem from './src/component/TodoItem';
@@ -31,7 +32,7 @@ import {
 } from 'react-native-router-flux';
 import FCM from 'react-native-fcm';
 import {registerKilledListener, registerAppListener} from "./src/Listeners";
-// import firebaseClient from  "./FirebaseClient";
+import firebaseClient from "./src/FirebaseClient";
 
 registerKilledListener();
 
@@ -159,11 +160,11 @@ export default class App extends Component<{}> {
       console.log(e);
     }
 
-    //FCMトークンの取得
+    //FCMトークンの取得(パーミッション許可した時にトリガーされる)
     FCM.getFCMToken().then(token => {
       console.log("TOKEN (getFCMToken)", token);
       this.setState({
-        token: token || "",
+        token: token || "",//tokenに取得したtokenをセット
       })
     });
 
@@ -175,20 +176,115 @@ export default class App extends Component<{}> {
     }
   }
 
+  //ローカルの通知を表示
+  showLocalNotification(){
+    FCM.presentLocalNotification({
+      vibrate: 500,
+      title: 'Hello',
+      body: 'Test Notification',
+      big_text: 'i am large, i am large, i am large, i am large, i am large, i am large, i am large, i am large, i am large, i am large, i am large, i am large, i am large, i am large, i am large, i am large, i am large, i am large, i am large, i am large, i am large, i am large, i am large, i am large, i am large, i am large, i am large',
+      priority: "high",
+      sound: "bell.mp3",
+      large_icon: "https://image.freepik.com/free-icon/small-boy-cartoon_318-38077.jpg",
+      show_in_foreground: true,
+      group: 'test',
+      number: 10
+    });
+  }
+
+  //ロカールの通知をスケジューリングする
+  scheduleLocalNotification() {
+    FCM.scheduleLocalNotification({
+      id: 'testnotif',
+      fire_date: new Date().getTime()+5000,
+      vibrate: 500,
+      title: 'Hello',
+      body: 'Test Scheduled Notification',
+      sub_text: 'sub text',
+      priority: "high",
+      large_icon: "https://image.freepik.com/free-icon/small-boy-cartoon_318-38077.jpg",
+      show_in_foreground: true,
+      picture: 'https://firebase.google.com/_static/af7ae4b3fc/images/firebase/lockup.png',
+      wake_screen: true
+    });
+  }
+
+  //リモートの通知を送信
+  sendRemoteNotification(token) {
+    let body;
+
+    if(Platform.OS === 'android'){
+      body = {
+        "to": token,
+      	"data":{
+					"custom_notification": {
+						"title": "Simple FCM Client",
+						"body": "This is a notification with only NOTIFICATION.",
+						"sound": "default",
+						"priority": "high",
+						"show_in_foreground": true
+        	}
+    		},
+    		"priority": 10
+      }
+    } else {
+			body = {
+				"to": token,
+				"notification":{
+					"title": "Simple FCM Client",
+					"body": "This is a notification with only NOTIFICATION.",
+					"sound": "default"
+				},
+				"priority": 10
+			}
+		}
+
+    firebaseClient.send(JSON.stringify(body), "notification");
+  }
+
+  //リモート通知をデータ付きで送る
+  sendRemoteNotificationWithData(token) {
+    let body = {
+      "to": token,
+      "notification":{
+    		"title": "Simple FCM Client",
+    		"body": "This is a notification with NOTIFICATION and DATA (NOTIF).",
+				"sound": "default"
+    	},
+    	"data":{
+    		"hello": "there"
+    	},
+    	"priority": "high"
+    }
+
+    firebaseClient.send(JSON.stringify(body), "notification-data");
+  }
+
   render() {
 
-    const {
-      list,
+    let {
+      token,
+      tokenCopyFeedback
     } = this.state;
 
     return (
-      <Router>
-        <Scene key='root' style={{paddingTop: Platform.OS === 'ios' ? 64 :54}}>
-          {/* <Scene key='Home' component={Home} title='ホーム'/> */}
-          <Scene key='Chat' component={Chat} title='チャット'/>     
-          <Scene key='Tasks' component={Tasks} title='タスク一覧'/>     
-        </Scene>
-      </Router>
+      <View style={styles.container}>
+        <Text selectable={true} onPress={() => this.setClipboardContent(this.state.token)} style={styles.instructions}>
+          Token: {this.state.token}
+        </Text>
+        <Text>Init notif:{JSON.stringify(this.state.initNotif)}</Text>
+        <TouchableOpacity onPress={() => this.sendRemoteNotification(token)} style={styles.button}>
+          <Text style={styles.buttonText}>Send Remote Notification</Text>
+        </TouchableOpacity>
+      </View>
+
+      // <Router>
+      //   <Scene key='root' style={{paddingTop: Platform.OS === 'ios' ? 64 :54}}>
+      //     {/* <Scene key='Home' component={Home} title='ホーム'/> */}
+      //     <Scene key='Chat' component={Chat} title='チャット'/>     
+      //     <Scene key='Tasks' component={Tasks} title='タスク一覧'/>     
+      //   </Scene>
+      // </Router>
       // <Router>
       //   <Tabs key='root' style={{paddingTop: Platform.OS === 'ios' ? 64 :54}}>
       //     <Scene key='Home' component={Home} title='ホーム' tabBarLabel='home'/>
@@ -219,12 +315,22 @@ export default class App extends Component<{}> {
       // </SimpleApp>
     );
   }
+
+  setClipboardContent(text) {
+    Clipboard.setString(text);
+    this.setState({tokenCopyFeedback: "Token copied to clipboard."});
+    setTimeout(() => {this.clearTokenCopyFeedback()}, 2000);
+  }
+
+  clearTokenCopyFeedback() {
+    this.setState({tokenCopyFeedback: ""});
+  }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#333',
+    // backgroundColor: '#333',
     paddingTop: 40,
     alignItems: 'center',
   },
