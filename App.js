@@ -30,102 +30,102 @@ import {
   Tabs
 } from 'react-native-router-flux';
 import FCM from 'react-native-fcm';
-// import {registerKilledListener, registerAppListener} from "./Listeners";
+import {registerKilledListener, registerAppListener} from "./src/Listeners";
 // import firebaseClient from  "./FirebaseClient";
 
-// registerKilledListener();
+registerKilledListener();
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+// const instructions = Platform.select({
+//   ios: 'Press Cmd+R to reload,\n' +
+//     'Cmd+D or shake for dev menu',
+//   android: 'Double tap R on your keyboard to reload,\n' +
+//     'Shake or press menu button for dev menu',
+// });
 
-//Home画面
-class HomeScreen extends Component {
-  static navigationOptions = {
-    title:'Hu-Hu-Chat!',
-  };
+// //Home画面
+// class HomeScreen extends Component {
+//   static navigationOptions = {
+//     title:'Hu-Hu-Chat!',
+//   };
 
-  render() {
-    const { navigate } = this.props.navigation;
+//   render() {
+//     const { navigate } = this.props.navigation;
 
-    return (
-      <View>
-        <Text>Hello, Chat App!</Text>
-        <Profile/>
-        <Button
-          onPress={() => navigate('Chat',{ user:'Saori' })}
-          title='Saori'
-        />
-        <Button
-          onPress={() => navigate('Profile',{ from:'Tokyo',user:'Saori' })}
-          title='Saori'
-        />
-      </View>
-    );
-  }
-}
+//     return (
+//       <View>
+//         <Text>Hello, Chat App!</Text>
+//         <Profile/>
+//         <Button
+//           onPress={() => navigate('Chat',{ user:'Saori' })}
+//           title='Saori'
+//         />
+//         <Button
+//           onPress={() => navigate('Profile',{ from:'Tokyo',user:'Saori' })}
+//           title='Saori'
+//         />
+//       </View>
+//     );
+//   }
+// }
 
-//Chat画面
-class ChatScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
-    title:`Chat with ${navigation.state.params.user}`,
-  });
+// //Chat画面
+// class ChatScreen extends Component {
+//   static navigationOptions = ({ navigation }) => ({
+//     title:`Chat with ${navigation.state.params.user}`,
+//   });
 
-  constructor(props){
-    super(props);
-    this.state = {text:''};
-  }
+//   constructor(props){
+//     super(props);
+//     this.state = {text:''};
+//   }
 
-  render() {
+//   render() {
 
-    const {
-      params,
-    } = this.props.navigation.state;
+//     const {
+//       params,
+//     } = this.props.navigation.state;
 
-    return (      
-    <ScrollView>
-      <Text>Chat with {params.user}</Text>
-        <Image style={{height:400,width:400}} source={{url:'https://peeech.s3.us-east-2.amazonaws.com/profiles/2-1512472489-php1FQ8bH.png'}}/>
-        <Image style={{height:400,width:400}} source={{url:'https://peeech.s3.us-east-2.amazonaws.com/profiles/2-1512472489-php1FQ8bH.png'}}/>
-        <Image style={{height:400,width:400}} source={{url:'https://peeech.s3.us-east-2.amazonaws.com/profiles/2-1512472489-php1FQ8bH.png'}}/>
-        <Image style={{height:400,width:400}} source={{url:'https://peeech.s3.us-east-2.amazonaws.com/profiles/2-1512472489-php1FQ8bH.png'}}/>
-        <Image style={{height:400,width:400}} source={{url:'https://peeech.s3.us-east-2.amazonaws.com/profiles/2-1512472489-php1FQ8bH.png'}}/>
-      <TextInput 
-          style={{height:40}}
-          placeholder="メッセージ入力"
-          onChangeText={(text) => this.setState({text})}
-      />
-      <Text style={{padding: 10, fontSize: 42}}>{this.state.text}</Text>
-    </ScrollView>);
-  }
-}
+//     return (      
+//     <ScrollView>
+//       <Text>Chat with {params.user}</Text>
+//         <Image style={{height:400,width:400}} source={{url:'https://peeech.s3.us-east-2.amazonaws.com/profiles/2-1512472489-php1FQ8bH.png'}}/>
+//         <Image style={{height:400,width:400}} source={{url:'https://peeech.s3.us-east-2.amazonaws.com/profiles/2-1512472489-php1FQ8bH.png'}}/>
+//         <Image style={{height:400,width:400}} source={{url:'https://peeech.s3.us-east-2.amazonaws.com/profiles/2-1512472489-php1FQ8bH.png'}}/>
+//         <Image style={{height:400,width:400}} source={{url:'https://peeech.s3.us-east-2.amazonaws.com/profiles/2-1512472489-php1FQ8bH.png'}}/>
+//         <Image style={{height:400,width:400}} source={{url:'https://peeech.s3.us-east-2.amazonaws.com/profiles/2-1512472489-php1FQ8bH.png'}}/>
+//       <TextInput 
+//           style={{height:40}}
+//           placeholder="メッセージ入力"
+//           onChangeText={(text) => this.setState({text})}
+//       />
+//       <Text style={{padding: 10, fontSize: 42}}>{this.state.text}</Text>
+//     </ScrollView>);
+//   }
+// }
 
-//Profile画面
-class ProfileScreen extends Component {
-  static navigationOptions = ({navigation}) => ({
-    title:`Profile of ${navigation.state.params.user}`,
-  });
+// //Profile画面
+// class ProfileScreen extends Component {
+//   static navigationOptions = ({navigation}) => ({
+//     title:`Profile of ${navigation.state.params.user}`,
+//   });
 
-  render() {
-    const {
-      params,
-    } = this.props.navigation.state;
+//   render() {
+//     const {
+//       params,
+//     } = this.props.navigation.state;
 
-    return (
-      <Text>I'm from {params.from}</Text>
-    );
-  }
-}
+//     return (
+//       <Text>I'm from {params.from}</Text>
+//     );
+//   }
+// }
 
-//screenの管理
-const SimpleApp = StackNavigator({
-  Home: { screen: HomeScreen },
-  Chat: { screen: ChatScreen },
-  Profile: { screen: ProfileScreen },
-});
+// //screenの管理
+// const SimpleApp = StackNavigator({
+//   Home: { screen: HomeScreen },
+//   Chat: { screen: ChatScreen },
+//   Profile: { screen: ProfileScreen },
+// });
 
 //親コンポーネント
 export default class App extends Component<{}> {
@@ -136,83 +136,45 @@ export default class App extends Component<{}> {
     this.state = {
       token:"",
       tokenCopyFeedback:"",
-      // list:[],//listという名前で配列を初期化
     };//オブジェクトリテラル
   }
 
-
-  // _delete = (index) => () => {
-  //   const list = [].concat(this.state.list);
-  //   list.splice(index,1);//keyがindexの要素を１つ削除する
-
-  //   console.log(index);
-  //   this.setState({
-  //     list,
-  //   });
-  // }
-
-  // _done = (index) => () => {
-  //   const list = [].concat(this.state.list);
-  //   list[index].done = !list[index].done;//keyがindexの要素のdoneの値(true/false)を反転させる
-
-  //   this.setState({
-  //     list,
-  //   });
-  // }
-
-  // _onPress = (text) => {
-
-  //   const list = [].concat(this.state.list);//this.state.listを[]に連結させる
-
-  //   list.push({
-  //     key: Date.now(),//FlatListのdataに入れる配列にはkey(一意な値)が無いとダメ
-  //     text: text,
-  //     done: false
-  //   });//listに新しい要素を追加
-
-  //   this.setState({//stateを変更して再度renderメソッドを走らせる
-  //     list,
-  //   });
-
-  // }
-
   //コンポーネントがマウントされた時の処理(トークン取得や通知許可等)
-  // async componentDidMount() {
-  //   //Listnerを登録
-  //   registerAppListener();
+  async componentDidMount() {
+    //Listnerを登録
+    registerAppListener();
 
-  //   //
-  //   FCM.getInitialNotification().then(notif => {
-  //     this.setState({
-  //       initNotif: notif,
-  //     })
-  //   });
+    //初期通知を取得？通知をクリックしてアプリを起動した時に実行される
+    //通知内容をinitNotif(初期通知)stateに設定
+    FCM.getInitialNotification().then(notif => {
+      this.setState({
+        initNotif: notif,
+      })
+    });
 
-  //   //初回起動時にユーザーに通知の許可をもらう
-  //   try {
-  //     let result = await FCM.requestPermissions({badge:false,sound:true,alert:true});
-  //   }catch(e){
-  //     console.log(e);
-  //   }
+    //初回起動時にユーザーに通知の許可をもらう
+    try {
+      let result = await FCM.requestPermissions({badge:false,sound:true,alert:true});
+    }catch(e){
+      console.log(e);
+    }
 
-  //   //FCMトークンの取得
-  //   FCM.getFCMToken().then(token => {
-  //     console.log("TOKEN (getFCMToken)", token);
-  //     this.setState({
-  //       token: token || "",
-  //     })
-  //   });
+    //FCMトークンの取得
+    FCM.getFCMToken().then(token => {
+      console.log("TOKEN (getFCMToken)", token);
+      this.setState({
+        token: token || "",
+      })
+    });
 
-  //   //APNsトークンの取得
-  //   if(Platform.OS === "ios"){
-  //     FCM.getAPNSToken().then(token => {
-  //       console.log("APNS TOKEN (getFCMToken)", token);
-  //     });
-  //   }
+    //APNsトークンの取得
+    if(Platform.OS === "ios"){
+      FCM.getAPNSToken().then(token => {
+        console.log("APNS TOKEN (getFCMToken)", token);
+      });
+    }
+  }
 
-  // }
-
-  //onPress2という名前でthis.displayという関数を子コンポーネントに送っている
   render() {
 
     const {
