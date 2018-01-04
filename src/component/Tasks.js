@@ -24,6 +24,28 @@ export default class Tasks extends Component {
         };
     }
 
+    // _delete = (index) => () => {
+    //     const list = [].concat(this.state.list);
+    //     list.splice(index,1);//keyがindexの要素を１つ削除する
+
+    //     console.log(index);
+    //     this.setState({
+    //     list,
+    //     });
+    // }
+
+    _done = (index,key) => () => {
+        const tasklist = [].concat(this.state.tasklist);
+        tasklist[index].done = !tasklist[index].done;//keyがindexの要素のdoneの値(true/false)を反転させる
+
+        console.log(key);
+        Backend.changeTaskStatus(key,tasklist[index].done);
+
+        this.setState({
+            tasklist,
+        });
+    }
+
     render(){
 
         // const {
@@ -50,8 +72,9 @@ export default class Tasks extends Component {
                 </TouchableOpacity>
                 <FlatList
                     data={this.state.tasklist}//レンダリングしたい配列
-                    renderItem={({item}) => <TaskItem
+                    renderItem={({item,index}) => <TaskItem
                         {...item}
+                        onDone={this._done(index,item.key)}
                     />
                     }//TodoItemコンポーネントの引数にitemを指定
                 />
@@ -67,6 +90,7 @@ export default class Tasks extends Component {
                     key: key,//FlatListのdataに入れる配列にはkey(一意な値)が無いとダメ
                     text: tasks[key].task,
                     expire: tasks[key].expire,
+                    responsible: tasks[key].responsible,
                     done: false
                 });
             }

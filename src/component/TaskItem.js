@@ -8,7 +8,7 @@ import {
     TouchableOpacity,
     TextInput
 } from 'react-native';
-
+import Button from './Button';
 
 export default class TaskItem extends Component {
 
@@ -16,15 +16,26 @@ export default class TaskItem extends Component {
 
         const {
             text,
-            expire
+            expire,
+            responsible,
+            onDone,
+            done
         } = this.props;
 
         const expireDate = new Date(expire);
         const expireText = `期限:${expireDate.getFullYear()}年${expireDate.getMonth() + 1}月${expireDate.getDate()}日${expireDate.getHours()}時${expireDate.getMinutes()}分`;
+        const responsibleText = `担当:${responsible}`;
 
         return(
             <View style={styles.container}>
-                <Text style={styles.text}>{text}/{expireText}</Text>
+                <Text style={styles.text}>{text}/{expireText}/{responsibleText}</Text>
+                <Button 
+                    textStyle={styles.textStyle}
+                    onPress={onDone}//onPressという名前でButtonにonDone関数を渡す
+                    //doneの値もstateで管理している
+                >
+                    {done ? "Undo" : "Done"}
+                </Button>
             </View>
         );
     }

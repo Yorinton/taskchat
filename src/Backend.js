@@ -85,6 +85,8 @@ class Backend {
         this.tasksRef.push({
             task: task.text,
             expire: task.expire,
+            responsible: task.responsible,
+            done:task.done,
             createdAt: firebase.database.ServerValue.TIMESTAMP,
         });
     }
@@ -99,6 +101,15 @@ class Backend {
         }
 
         this.tasksRef.orderByChild('expire').on('value',onReceive);
+    }
+
+    changeTaskStatus(key,isDone){
+        const ref = `tasks/${key}`;
+        this.tasksRef = firebase.database().ref(ref);
+
+        this.tasksRef.update({done:isDone});
+
+        this.tasksRef.off();
     }
 
     // detatchTaskRef(){
