@@ -19,6 +19,7 @@ export default class TaskItem extends Component {
             expire,
             responsible,
             onDone,
+            onDelete,
             done
         } = this.props;
 
@@ -28,13 +29,19 @@ export default class TaskItem extends Component {
 
         return(
             <View style={styles.container}>
-                <Text style={styles.text}>{text}/{expireText}/{responsibleText}</Text>
+                <Text style={styles.text}>{text}{"\n"}{expireText}{"\n"}{responsibleText}</Text>
                 <Button 
                     textStyle={styles.textStyle}
                     onPress={onDone}//onPressという名前でButtonにonDone関数を渡す
                     //doneの値もstateで管理している
                 >
                     {done ? "Undo" : "Done"}
+                </Button>
+                <Button 
+                    style={styles.deleteButton}
+                    onPress={onDelete}
+                >
+                    Delete
                 </Button>
             </View>
         );

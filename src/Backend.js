@@ -103,6 +103,18 @@ class Backend {
         this.tasksRef.orderByChild('expire').on('value',onReceive);
     }
 
+    readTasksLimit(callback,num){
+        this.tasksRef = firebase.database().ref('tasks');
+        this.tasksRef.off();
+
+        const onReceive = (dataSnapShot) => {
+            const tasks = dataSnapShot.val();
+            callback(tasks);
+        }
+
+        this.tasksRef.limitToLast(num).on('value',onReceive);
+    }
+
     changeTaskStatus(key,isDone){
         const ref = `tasks/${key}`;
         this.tasksRef = firebase.database().ref(ref);
@@ -112,6 +124,13 @@ class Backend {
         this.tasksRef.off();
     }
 
+    deleteTask(key){
+        const ref = `tasks/${key}`;
+        this.tasksRef = firebase.database().ref(ref);
+
+        this.tasksRef.remove();
+        this.tasksRef.off();
+    }
     // detatchTaskRef(){
     //     this.tasksRef = firebase.database().ref('tasks');
     //     this.tasksRef.off();

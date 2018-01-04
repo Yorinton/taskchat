@@ -24,21 +24,23 @@ export default class Tasks extends Component {
         };
     }
 
-    // _delete = (index) => () => {
-    //     const list = [].concat(this.state.list);
-    //     list.splice(index,1);//keyがindexの要素を１つ削除する
+    _delete = (index,key) => () => {
+        const tasklist = [].concat(this.state.tasklist);
+        tasklist.splice(index,1);//keyがindexの要素を１つ削除する
 
-    //     console.log(index);
-    //     this.setState({
-    //     list,
-    //     });
-    // }
+        Backend.deleteTask(key);
+
+        this.setState({
+            tasklist,
+        });
+    }
 
     _done = (index,key) => () => {
         const tasklist = [].concat(this.state.tasklist);
         tasklist[index].done = !tasklist[index].done;//keyがindexの要素のdoneの値(true/false)を反転させる
 
         console.log(key);
+        console.log(tasklist[index].done);
         Backend.changeTaskStatus(key,tasklist[index].done);
 
         this.setState({
@@ -75,6 +77,7 @@ export default class Tasks extends Component {
                     renderItem={({item,index}) => <TaskItem
                         {...item}
                         onDone={this._done(index,item.key)}
+                        onDelete={this._delete(index,item.key)}
                     />
                     }//TodoItemコンポーネントの引数にitemを指定
                 />
