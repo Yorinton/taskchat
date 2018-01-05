@@ -9,6 +9,7 @@ import {
     DatePickerIOS
 } from 'react-native';
 import Backend from '../Backend.js';
+import Notification from '../Notification';
 
 export default class TaskRegister extends Component {
 
@@ -77,6 +78,8 @@ export default class TaskRegister extends Component {
             this.task['expire'] = this.state.date.getTime();
             this.task['responsible'] = this.ref_res._lastNativeText;
             Backend.registerTask(this.task);
+            Notification.scheduleLocalNotification();
+            Notification.setBadgeNumber(1);
             this.ref.setNativeProps({text:''});
         }
     }

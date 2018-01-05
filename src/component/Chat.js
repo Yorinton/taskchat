@@ -23,6 +23,7 @@ import {
 import Home from './Home';
 import TaskRegister from './TaskRegister';
 import TaskItem from './TaskItem';
+import Tasks from './Tasks';
 
 export default class Chat extends Component {
 

@@ -131,10 +131,14 @@ class Backend {
         this.tasksRef.remove();
         this.tasksRef.off();
     }
-    // detatchTaskRef(){
-    //     this.tasksRef = firebase.database().ref('tasks');
-    //     this.tasksRef.off();
-    // }
+
+    storeToken(token){
+        const tokenRef = firebase.database().ref('token');
+        tokenRef.push({
+            token:token,
+        });
+    }
+
 }
 
 export default new Backend();

@@ -13,6 +13,7 @@ import {
 } from 'react-native-router-flux';
 import Backend from '../Backend';
 import TaskItem from './TaskItem';
+import Notification from '../Notification';
 
 export default class Tasks extends Component {
 
@@ -84,6 +85,33 @@ export default class Tasks extends Component {
         );
     }
     componentDidMount(){
+        // Backend.readTasks((tasks)=>{
+        //     const tasklist = [].concat(this.state.tasklist);
+
+        //     for(var key in tasks){
+        //         tasklist.push({
+        //             key: key,//FlatListのdataに入れる配列にはkey(一意な値)が無いとダメ
+        //             text: tasks[key].task,
+        //             expire: tasks[key].expire,
+        //             responsible: tasks[key].responsible,
+        //             done: tasks[key].done
+        //         });
+        //     }
+
+        //     this.setState({
+        //         tasklist,
+        //     });
+
+        //     Notification.setBadgeNumber(tasklist.length);
+        // });
+        this.readTasks();
+    }
+
+    // componentWillUnmount(){
+    //     this.readTasks();
+    // }
+
+    readTasks(){
         Backend.readTasks((tasks)=>{
             const tasklist = [].concat(this.state.tasklist);
 
@@ -99,7 +127,10 @@ export default class Tasks extends Component {
 
             this.setState({
                 tasklist,
-            })
-        });
+            });
+
+            Notification.setBadgeNumber(tasklist.length);
+        });      
     }
+
 }
