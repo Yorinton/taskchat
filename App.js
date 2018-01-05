@@ -195,17 +195,17 @@ export default class App extends Component<{}> {
   //ロカールの通知をスケジューリングする
   scheduleLocalNotification() {
     FCM.scheduleLocalNotification({
-      id: 'testnotif',
+      id: 'testnotif',//uniqueにする必要がある
       fire_date: new Date().getTime()+5000,
-      vibrate: 500,
+      // vibrate: 500,
       title: 'Hello',
       body: 'Test Scheduled Notification',
-      sub_text: 'sub text',
+      // sub_text: 'sub text',
       priority: "high",
-      large_icon: "https://image.freepik.com/free-icon/small-boy-cartoon_318-38077.jpg",
+      // large_icon: "https://image.freepik.com/free-icon/small-boy-cartoon_318-38077.jpg",
       show_in_foreground: true,
-      picture: 'https://firebase.google.com/_static/af7ae4b3fc/images/firebase/lockup.png',
-      wake_screen: true
+      // picture: 'https://firebase.google.com/_static/af7ae4b3fc/images/firebase/lockup.png',
+      // wake_screen: true
     });
   }
 
@@ -275,6 +275,9 @@ export default class App extends Component<{}> {
         <Text>Init notif:{JSON.stringify(this.state.initNotif)}</Text>
         <TouchableOpacity onPress={() => this.sendRemoteNotification(token)} style={styles.button}>
           <Text style={styles.buttonText}>Send Remote Notification</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => this.scheduleLocalNotification()} style={styles.button}>
+          <Text style={styles.buttonText}>Schedule Notification in 5s</Text>
         </TouchableOpacity>
       </View>
 
