@@ -79,6 +79,11 @@ export default class TaskRegister extends Component {
             this.task['responsible'] = this.ref_res._lastNativeText;
             Backend.registerTask(this.task);
             Notification.scheduleLocalNotification();
+            Backend.readToken((data)=>{
+                for(var key in data){
+                    Notification.sendRemoteNotification(data[key].token,this.task['text'],'新しいタスク');
+                }
+            });
             Notification.setBadgeNumber(1);
             this.ref.setNativeProps({text:''});
         }
