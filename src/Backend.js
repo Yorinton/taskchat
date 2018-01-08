@@ -7,6 +7,7 @@ class Backend {
     uid = '';
     messageRef = null;
     tasksRef = null;
+    tokenRef = null;
 
     constructor() {
         firebase.initializeApp({
@@ -131,10 +132,28 @@ class Backend {
         this.tasksRef.remove();
         this.tasksRef.off();
     }
-    // detatchTaskRef(){
-    //     this.tasksRef = firebase.database().ref('tasks');
-    //     this.tasksRef.off();
-    // }
+
+    storeToken(token){
+
+        //if(該当トークンがdbに存在しなければ)
+        const tokenRef = firebase.database().ref('token');
+        tokenRef.push({
+            token:token,
+        });
+    }
+
+    readToken(callback){
+        this.tokenRef = firebase.database().ref('token');
+        this.tokenRef.off();
+
+        const onReceive = (dataSnapShot) => {
+            const tokens = dataSnapShot.val();
+            callback(tokens);
+        }
+
+        this.tokenRef.on('value',onReceive);
+    }
+
 }
 
 export default new Backend();

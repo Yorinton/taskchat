@@ -23,6 +23,8 @@ import {
 import Home from './Home';
 import TaskRegister from './TaskRegister';
 import TaskItem from './TaskItem';
+import Tasks from './Tasks';
+import Notification from '../Notification';
 
 export default class Chat extends Component {
 
@@ -64,9 +66,7 @@ export default class Chat extends Component {
         return (
             <GiftedChat
                 messages={this.state.messages}
-                onSend={(message) => {
-                    Backend.sendMessage(message);
-                }}
+                onSend={(message) => this.sendMessage(message)}
                 user={{
                     _id: Backend.getUid(),//uidで自分か相手かを判別
                     // name: this.props.username,//名前を設定するとアバターに表示される
@@ -103,6 +103,16 @@ export default class Chat extends Component {
                 </Modal>
             </GiftedChat>
         );
+    }
+
+    sendMessage(message){
+        Backend.readToken((data)=>{
+            for(var key in data){
+                Notification.sendRemoteNotification(data[key].token,message[0].text,'新着メッセージ');
+            }
+        });
+
+        Backend.sendMessage(message);
     }
 
     cancel() {
