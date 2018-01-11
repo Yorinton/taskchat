@@ -162,15 +162,15 @@ export default class App extends Component<{}> {
     }
 
     //FCMトークンの取得(パーミッション許可した時にトリガーされる)
-    // FCM.getFCMToken().then(token => {
-    //   console.log("TOKEN (getFCMToken)", token);
-    //   //tokenをfirebaseのrealtimedatabaseに保存
-    //   Backend.storeToken(token);
+    FCM.getFCMToken().then(token => {
+      console.log("TOKEN (getFCMToken)", token);
+      //tokenをfirebaseのrealtimedatabaseに保存
+      Backend.storeToken(token);
 
-    //   this.setState({
-    //     token: token || "",//tokenに取得したtokenをセット
-    //   })
-    // });
+      this.setState({
+        token: token || "",//tokenに取得したtokenをセット
+      })
+    });
 
     //APNsトークンの取得
     if(Platform.OS === "ios"){

@@ -78,7 +78,12 @@ export default class TaskRegister extends Component {
             this.task['expire'] = this.state.date.getTime();
             this.task['responsible'] = this.ref_res._lastNativeText;
             Backend.registerTask(this.task);
-            Notification.scheduleLocalNotification();
+            Notification.scheduleLocalNotification(this.task['text'],this.task['expire'] - 1000 * 60 * 60 * 3,'3時間前です');
+            Notification.scheduleLocalNotification(this.task['text'],this.task['expire'] - 1000 * 60 * 60 * 1,'1時間前です');
+            Notification.scheduleLocalNotification(this.task['text'],this.task['expire'] - 1000 * 60 * 30,'30分前です');
+            Notification.scheduleLocalNotification(this.task['text'],this.task['expire'],'期限です');
+            Notification.scheduleLocalNotification(this.task['text'],this.task['expire'] + 1000 * 60 * 30,'期限を30分過ぎてます');
+            Notification.scheduleLocalNotification(this.task['text'],this.task['expire'] + 1000 * 60 * 60 * 1,'期限を1時間過ぎてます');
             Backend.readToken((data)=>{
                 for(var key in data){
                     Notification.sendRemoteNotification(data[key].token,this.task['text'],'新しいタスク');

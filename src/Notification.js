@@ -5,12 +5,12 @@ import { Platform } from 'react-native';
 
 class Notification{
     //ロカールの通知をスケジューリングする
-    scheduleLocalNotification() {
+    scheduleLocalNotification(value,expire,limitUntilExpire) {
     FCM.scheduleLocalNotification({
         id: 'testnotif',//uniqueにする必要がある
-        fire_date: new Date().getTime()+5000,
-        title: '1時間前です',
-        body: 'ゴミ出し',
+        fire_date: expire,
+        title: limitUntilExpire,
+        body: value,
         priority: "high",
         show_in_foreground: true,
     });

@@ -1,6 +1,7 @@
 import { Platform, AsyncStorage } from 'react-native';
 
 import FCM, {FCMEvent, RemoteNotificationResult, WillPresentNotificationResult, NotificationType} from "react-native-fcm";
+import Notification from './Notification';
 
 AsyncStorage.getItem('lastNotification').then(data=>{
     if(data){
@@ -32,12 +33,17 @@ export function registerAppListener(){
         if(Platform.OS === 'ios'){
             switch(notif._notificationType){
                 case NotificationType.Remote:
+                    console.log('Remote');
+                    // Notification.scheduleLocalNotification('リモート通知後のローカル通知スケジュール',(new Date()).getTime() + 5000,'5秒前');
                     notif.finish(RemoteNotificationResult.NewData);
                     break;
                 case NotificationType.NotificationResponse:
+                    console.log('NotificationResponse');
                     notif.finish();
                     break;
                 case NotificationType.WillPresent:
+                    console.log('WillPresent');
+                    Notification.scheduleLocalNotification('リモート通知後のローカル通知スケジュール',(new Date()).getTime() + 5000,'5秒前');                    
                     notif.finish(WillPresentNotificationResult.All);
                     break;
             }
