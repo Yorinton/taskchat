@@ -43,23 +43,6 @@ export default class Chat extends Component {
         this.setState({
             visibleModal:false,
         });
-
-        Backend.readTasksLimit((tasks)=>{
-            const tasklist = [].concat(this.state.tasklist);
-
-            for(var key in tasks){
-                tasklist.push({
-                    key: key,//FlatListのdataに入れる配列にはkey(一意な値)が無いとダメ
-                    text: tasks[key].task,
-                    expire: tasks[key].expire,
-                    responsible: tasks[key].responsible,
-                    done: tasks[key].done
-                });
-            }
-            this.setState({
-                tasklist,
-            });
-        },2);
     }
 
     render() {
@@ -185,6 +168,25 @@ export default class Chat extends Component {
                 };
             });
         });
+
+        Backend.readTasksLimit((tasks)=>{
+            // const tasklist = [].concat(this.state.tasklist);
+            const tasklist = [];
+
+            for(var key in tasks){
+                tasklist.push({
+                    key: key,//FlatListのdataに入れる配列にはkey(一意な値)が無いとダメ
+                    text: tasks[key].task,
+                    expire: tasks[key].expire,
+                    responsible: tasks[key].responsible,
+                    done: tasks[key].done
+                });
+            }
+            this.setState({
+                tasklist,
+            });
+            console.log(tasklist);
+        },2);
     }
 
     //別ページに遷移した時
