@@ -42,8 +42,12 @@ export function registerAppListener(){
                     notif.finish();
                     break;
                 case NotificationType.WillPresent:
-                    console.log('WillPresent');
-                    Notification.scheduleLocalNotification('リモート通知後のローカル通知スケジュール',(new Date()).getTime() + 5000,'5秒前');                    
+                    Notification.scheduleLocalNotification(notif.title,parseInt(notif.expire) - 1000 * 60 * 60 * 3,'3時間前です');
+                    Notification.scheduleLocalNotification(notif.title,parseInt(notif.expire) - 1000 * 60 * 60 * 1,'1時間前です');
+                    Notification.scheduleLocalNotification(notif.title,parseInt(notif.expire) - 1000 * 60 * 30,'30分前です');
+                    Notification.scheduleLocalNotification(notif.title,parseInt(notif.expire),'期限です');
+                    Notification.scheduleLocalNotification(notif.title,parseInt(notif.expire) + 1000 * 60 * 30,'期限を30分過ぎてます');
+                    Notification.scheduleLocalNotification(notif.title,parseInt(notif.expire) + 1000 * 60 * 60 * 1,'期限を1時間過ぎてます');                                      
                     notif.finish(WillPresentNotificationResult.All);
                     break;
             }
