@@ -185,7 +185,6 @@ export default class Chat extends Component {
             this.setState({
                 tasklist,
             });
-            console.log(tasklist);
         },2);
     }
 

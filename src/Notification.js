@@ -54,6 +54,23 @@ class Notification{
         firebaseClient.send(JSON.stringify(body), "notification");
     }
 
+    //リモート通知をデータ付きで送る
+    sendRemoteNotificationWithData(token,value,title,data) {
+        let body = {
+            "to": token,
+            "notification":{
+                "title": title,
+                "body": value,
+                "sound": "default",
+                "show_in_foreground": false
+            },
+            "data":data,//{key:value}の形式
+            "priority": "high"
+        }
+
+        firebaseClient.send(JSON.stringify(body), "notification-data");
+    }
+
 }
 
 export default new Notification();
