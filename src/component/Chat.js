@@ -25,23 +25,27 @@ import TaskRegister from './TaskRegister';
 import TaskItem from './TaskItem';
 import Tasks from './Tasks';
 import Notification from '../Notification';
+import FCM from 'react-native-fcm';
 
 export default class Chat extends Component {
 
     state = {
         messages:[],
-        tasklist:[]
+        tasklist:[],
+        token:""
     };
-
-    // constructor(props){
-    //     super(props);
-
-
-    // }
 
     componentWillMount() {
         this.setState({
             visibleModal:false,
+        });
+
+        FCM.getFCMToken().then(token => {
+            console.log("TOKEN (getFCMToken)", token);
+
+            this.setState({
+              token: token,//tokenに取得したtokenをセット
+            })
         });
     }
 
@@ -91,7 +95,9 @@ export default class Chat extends Component {
     sendMessage(message){
         Backend.readToken((data)=>{
             for(var key in data){
-                Notification.sendRemoteNotification(data[key].token,message[0].text,'新着メッセージ');
+                if(this.state.token !== data[key].token){
+                    Notification.sendRemoteNotification(data[key].token,message[0].text,'新着メッセージ');
+                }
             }
         });
 
@@ -188,10 +194,6 @@ export default class Chat extends Component {
         },2);
     }
 
-    //別ページに遷移した時
-    componentWillUnmount() {
-
-    }
 }
 
 const styles = StyleSheet.create({

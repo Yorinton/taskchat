@@ -10,6 +10,8 @@ import {
 } from 'react-native';
 import Backend from '../Backend.js';
 import Notification from '../Notification';
+import FCM from 'react-native-fcm';
+
 
 export default class TaskRegister extends Component {
 
@@ -29,8 +31,20 @@ export default class TaskRegister extends Component {
     }
 
     state = {
-        date:new Date()
+        date:new Date(),
+        token:""
     };
+
+
+    componentWillMount() {
+        FCM.getFCMToken().then(token => {
+            console.log("TOKEN (getFCMToken)", token);
+
+            this.setState({
+              token: token,//tokenに取得したtokenをセット
+            })
+        });
+    }
 
     render(){
 
@@ -85,20 +99,24 @@ export default class TaskRegister extends Component {
             Notification.scheduleLocalNotification(this.task['text'],this.task['expire'],'期限です');
             Notification.scheduleLocalNotification(this.task['text'],this.task['expire'] + 1000 * 60 * 30,'期限を30分過ぎてます');
             Notification.scheduleLocalNotification(this.task['text'],this.task['expire'] + 1000 * 60 * 60 * 1,'期限を1時間過ぎてます');
-            
+
             //相手の端末に通知
             Backend.readToken((data)=>{
+
                 for(var key in data){
-                    Notification.sendRemoteNotificationWithData(
-                        data[key].token,
-                        this.task['text'],
-                        '新しいタスク',
-                        {
-                            expire:this.task['expire'],
-                            title:this.task['text']
-                        }
-                    );                    
-                    // Notification.sendRemoteNotification(data[key].token,this.task['text'],'新しいタスク');
+                    console.log('自分のtoken',this.state.token);
+                    console.log('通知先のtoken',data[key].token);
+                    if(this.state.token !== data[key].token){
+                        Notification.sendRemoteNotificationWithData(
+                            data[key].token,
+                            this.task['text'],
+                            '新しいタスク',
+                            {
+                                expire:this.task['expire'],
+                                title:this.task['text']
+                            }
+                        );
+                    }                  
                 }
             });
             Notification.setBadgeNumber(1);
