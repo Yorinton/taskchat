@@ -42,6 +42,7 @@ export function registerAppListener(){
                     notif.finish();
                     break;
                 case NotificationType.WillPresent:
+                    //データ付き通知でexpireが設定されているもののみローカル通知をスケジューリングする
                     if(notif.expire){
                         Notification.scheduleLocalNotification(notif.title,parseInt(notif.expire) - 1000 * 60 * 60 * 3,'3時間前です');
                         Notification.scheduleLocalNotification(notif.title,parseInt(notif.expire) - 1000 * 60 * 60 * 1,'1時間前です');

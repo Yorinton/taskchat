@@ -135,10 +135,18 @@ class Backend {
 
     storeToken(token){
 
-        //if(該当トークンがdbに存在しなければ)
-        const tokenRef = firebase.database().ref('token');
-        tokenRef.push({
-            token:token,
+        //DB登録済みtoken読み込み
+        this.readToken((tokens)=>{
+            for(var key in tokens){
+                if(tokens[key].token === token){
+                    return;
+                }
+            }
+            //if(該当トークンがdbに存在しなければ)
+            const tokenRef = firebase.database().ref('token');
+            tokenRef.push({
+                token:token,
+            });
         });
     }
 
