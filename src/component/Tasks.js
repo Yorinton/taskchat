@@ -25,11 +25,12 @@ export default class Tasks extends Component {
         };
     }
 
-    _delete = (index,key) => () => {
+    _delete = (index,key) => () => {//index・・0,1,2.. / key・・firebaseで発行されたkeyが入っている
         const tasklist = [].concat(this.state.tasklist);
         tasklist.splice(index,1);//keyがindexの要素を１つ削除する
 
         Backend.deleteTask(key);
+        this.deleteScheduledNotif(tasklist[index].id);
 
         this.setState({
             tasklist,
@@ -46,6 +47,10 @@ export default class Tasks extends Component {
         this.setState({
             tasklist,
         });
+    }
+
+    deleteScheduledNotif(notifId) {
+        Notification.deleteScheduledNotif(notifId);
     }
 
     render(){
@@ -85,31 +90,8 @@ export default class Tasks extends Component {
         );
     }
     componentDidMount(){
-        // Backend.readTasks((tasks)=>{
-        //     const tasklist = [].concat(this.state.tasklist);
-
-        //     for(var key in tasks){
-        //         tasklist.push({
-        //             key: key,//FlatListのdataに入れる配列にはkey(一意な値)が無いとダメ
-        //             text: tasks[key].task,
-        //             expire: tasks[key].expire,
-        //             responsible: tasks[key].responsible,
-        //             done: tasks[key].done
-        //         });
-        //     }
-
-        //     this.setState({
-        //         tasklist,
-        //     });
-
-        //     Notification.setBadgeNumber(tasklist.length);
-        // });
         this.readTasks();
     }
-
-    // componentWillUnmount(){
-    //     this.readTasks();
-    // }
 
     readTasks(){
         Backend.readTasks((tasks)=>{
@@ -118,6 +100,7 @@ export default class Tasks extends Component {
             for(var key in tasks){
                 tasklist.push({
                     key: key,//FlatListのdataに入れる配列にはkey(一意な値)が無いとダメ
+                    id: tasks[key].id,
                     text: tasks[key].task,
                     expire: tasks[key].expire,
                     responsible: tasks[key].responsible,
