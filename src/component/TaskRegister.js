@@ -103,7 +103,7 @@ export default class TaskRegister extends Component {
             Notification.scheduleLocalNotification(`${this.task['id']}-3h`,this.task['text'],this.task['expire'] - 1000 * 60 * 60 * 3,'3時間前です');
             Notification.scheduleLocalNotification(`${this.task['id']}-1h`,this.task['text'],this.task['expire'] - 1000 * 60 * 60 * 1,'1時間前です');
             Notification.scheduleLocalNotification(`${this.task['id']}-0.5h`,this.task['text'],this.task['expire'] - 1000 * 60 * 30,'30分前です');
-            Notification.scheduleLocalNotification(`${this.task['id']}+0h`,this.task['text'],this.task['expire'],'期限です');
+            Notification.scheduleLocalNotification(`${this.task['id']}-0h`,this.task['text'],this.task['expire'],'期限です');
             Notification.scheduleLocalNotification(`${this.task['id']}+0.5h`,this.task['text'],this.task['expire'] + 1000 * 60 * 30,'期限を30分過ぎてます');
             Notification.scheduleLocalNotification(`${this.task['id']}+1h`,this.task['text'],this.task['expire'] + 1000 * 60 * 60 * 1,'期限を1時間過ぎてます');
             

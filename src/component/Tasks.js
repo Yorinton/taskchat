@@ -27,10 +27,13 @@ export default class Tasks extends Component {
 
     _delete = (index,key) => () => {//index・・0,1,2.. / key・・firebaseで発行されたkeyが入っている
         const tasklist = [].concat(this.state.tasklist);
-        tasklist.splice(index,1);//keyがindexの要素を１つ削除する
 
         Backend.deleteTask(key);
+        //タスクに紐づくローカル通知を削除
         this.deleteScheduledNotif(tasklist[index].id);
+        console.log('_delete内で指定したid',tasklist[index].id)
+        //stateから削除したタスクに該当する要素を削除
+        tasklist.splice(index,1);//keyがindexの要素を１つ削除する
 
         this.setState({
             tasklist,
@@ -47,10 +50,6 @@ export default class Tasks extends Component {
         this.setState({
             tasklist,
         });
-    }
-
-    deleteScheduledNotif(notifId) {
-        Notification.deleteScheduledNotif(notifId);
     }
 
     render(){
@@ -92,10 +91,22 @@ export default class Tasks extends Component {
     componentDidMount(){
         this.readTasks();
     }
+    componentWillUpdate(){//新しいpropsかstateを受け取った時に呼ばれる
+        Backend.listenTaskDeleted((task)=>{
+            //通知を削除
+            console.log('削除するタスクのid',task.id);
+            this.deleteScheduledNotif(task.id);
+        });
+    }
+
+    deleteScheduledNotif(notifId) {
+        Notification.deleteScheduledNotif(notifId);
+    }
 
     readTasks(){
         Backend.readTasks((tasks)=>{
-            const tasklist = [].concat(this.state.tasklist);
+            // const tasklist = [].concat(this.state.tasklist);
+            const tasklist = [];
 
             for(var key in tasks){
                 tasklist.push({
