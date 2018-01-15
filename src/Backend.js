@@ -84,6 +84,7 @@ class Backend {
         this.tasksRef = firebase.database().ref('tasks');
         this.tasksRef.off();//これをやらないとTasksコンポーネントのマウント前にsetStateが実行されてしまう
         this.tasksRef.push({
+            id:task.id,
             task: task.text,
             expire: task.expire,
             responsible: task.responsible,

@@ -44,12 +44,14 @@ export function registerAppListener(){
                 case NotificationType.WillPresent:
                     //データ付き通知でexpireが設定されているもののみローカル通知をスケジューリングする
                     if(notif.expire){
-                        Notification.scheduleLocalNotification(notif.title,parseInt(notif.expire) - 1000 * 60 * 60 * 3,'3時間前です');
-                        Notification.scheduleLocalNotification(notif.title,parseInt(notif.expire) - 1000 * 60 * 60 * 1,'1時間前です');
-                        Notification.scheduleLocalNotification(notif.title,parseInt(notif.expire) - 1000 * 60 * 30,'30分前です');
-                        Notification.scheduleLocalNotification(notif.title,parseInt(notif.expire),'期限です');
-                        Notification.scheduleLocalNotification(notif.title,parseInt(notif.expire) + 1000 * 60 * 30,'期限を30分過ぎてます');
-                        Notification.scheduleLocalNotification(notif.title,parseInt(notif.expire) + 1000 * 60 * 60 * 1,'期限を1時間過ぎてます');
+                        const date = new Date(notif.expire);
+                        console.log(date);
+                        Notification.scheduleLocalNotification(`${notif.id}-3h`,notif.title,parseInt(notif.expire) - 1000 * 60 * 60 * 3,'3時間前です');
+                        Notification.scheduleLocalNotification(`${notif.id}-1h`,notif.title,parseInt(notif.expire) - 1000 * 60 * 60 * 1,'1時間前です');
+                        Notification.scheduleLocalNotification(`${notif.id}-0.5h`,notif.title,parseInt(notif.expire) - 1000 * 60 * 30,'30分前です');
+                        Notification.scheduleLocalNotification(`${notif.id}-0h`,notif.title,parseInt(notif.expire),'期限です');
+                        Notification.scheduleLocalNotification(`${notif.id}+0.5h`,notif.title,parseInt(notif.expire) + 1000 * 60 * 30,'期限を30分過ぎてます');
+                        Notification.scheduleLocalNotification(`${notif.id}+1h`,notif.title,parseInt(notif.expire) + 1000 * 60 * 60 * 1,'期限を1時間過ぎてます');
                     }                                     
                     notif.finish(WillPresentNotificationResult.All);
                     break;

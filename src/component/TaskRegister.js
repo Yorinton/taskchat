@@ -11,7 +11,7 @@ import {
 import Backend from '../Backend.js';
 import Notification from '../Notification';
 import FCM from 'react-native-fcm';
-
+import uniqueId from '../Utility';
 
 export default class TaskRegister extends Component {
 
@@ -23,6 +23,7 @@ export default class TaskRegister extends Component {
         this.ref_res = {};
 
         this.task = {
+            id:'',
             text:'',
             expire:this.state.date.getTime(),
             responsible:'',
@@ -88,30 +89,37 @@ export default class TaskRegister extends Component {
 
     registerTask(){
         if(this.ref._lastNativeText && this.ref_res._lastNativeText){
+
+            //タスクをdbに保存
+            const notifId = uniqueId();
+            this.task['id'] = notifId;
             this.task['text'] = this.ref._lastNativeText;
             this.task['expire'] = this.state.date.getTime();
             this.task['responsible'] = this.ref_res._lastNativeText;
             Backend.registerTask(this.task);
-            //自分の端末に通知
-            Notification.scheduleLocalNotification(this.task['text'],this.task['expire'] - 1000 * 60 * 60 * 3,'3時間前です');
-            Notification.scheduleLocalNotification(this.task['text'],this.task['expire'] - 1000 * 60 * 60 * 1,'1時間前です');
-            Notification.scheduleLocalNotification(this.task['text'],this.task['expire'] - 1000 * 60 * 30,'30分前です');
-            Notification.scheduleLocalNotification(this.task['text'],this.task['expire'],'期限です');
-            Notification.scheduleLocalNotification(this.task['text'],this.task['expire'] + 1000 * 60 * 30,'期限を30分過ぎてます');
-            Notification.scheduleLocalNotification(this.task['text'],this.task['expire'] + 1000 * 60 * 60 * 1,'期限を1時間過ぎてます');
 
+            //自分の端末に通知
+            //idが重複すると上書きされるため-3h等の文字列をつける
+            Notification.scheduleLocalNotification(`${this.task['id']}-3h`,this.task['text'],this.task['expire'] - 1000 * 60 * 60 * 3,'3時間前です');
+            Notification.scheduleLocalNotification(`${this.task['id']}-1h`,this.task['text'],this.task['expire'] - 1000 * 60 * 60 * 1,'1時間前です');
+            Notification.scheduleLocalNotification(`${this.task['id']}-0.5h`,this.task['text'],this.task['expire'] - 1000 * 60 * 30,'30分前です');
+            Notification.scheduleLocalNotification(`${this.task['id']}+0h`,this.task['text'],this.task['expire'],'期限です');
+            Notification.scheduleLocalNotification(`${this.task['id']}+0.5h`,this.task['text'],this.task['expire'] + 1000 * 60 * 30,'期限を30分過ぎてます');
+            Notification.scheduleLocalNotification(`${this.task['id']}+1h`,this.task['text'],this.task['expire'] + 1000 * 60 * 60 * 1,'期限を1時間過ぎてます');
+            
             //相手の端末に通知
             Backend.readToken((data)=>{
 
                 for(var key in data){
-                    console.log('自分のtoken',this.state.token);
-                    console.log('通知先のtoken',data[key].token);
+                    // console.log('自分のtoken',this.state.token);
+                    // console.log('通知先のtoken',data[key].token);
                     if(this.state.token !== data[key].token){
                         Notification.sendRemoteNotificationWithData(
                             data[key].token,
                             this.task['text'],
                             '新しいタスク',
                             {
+                                id:this.task['id'],
                                 expire:this.task['expire'],
                                 title:this.task['text']
                             }
@@ -120,6 +128,7 @@ export default class TaskRegister extends Component {
                 }
             });
             Notification.setBadgeNumber(1);
+            //タスク入力欄をリセット
             this.ref.setNativeProps({text:''});
         }
     }

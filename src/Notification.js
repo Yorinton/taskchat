@@ -5,9 +5,9 @@ import { Platform } from 'react-native';
 
 class Notification{
     //ロカールの通知をスケジューリングする
-    scheduleLocalNotification(value,expire,limitUntilExpire) {
+    scheduleLocalNotification(id,value,expire,limitUntilExpire) {
     FCM.scheduleLocalNotification({
-        id: 'testnotif',//uniqueにする必要がある
+        id: id,//uniqueにする必要がある
         fire_date: expire,
         title: limitUntilExpire,
         body: value,
@@ -69,6 +69,15 @@ class Notification{
         }
 
         firebaseClient.send(JSON.stringify(body), "notification-data");
+    }
+
+    deleteScheduledNotif(notifId) {
+        FCM.cancelLocalNotification(`${notifId}-3h`);
+        FCM.cancelLocalNotification(`${notifId}-1h`);
+        FCM.cancelLocalNotification(`${notifId}-0.5h`);
+        FCM.cancelLocalNotification(`${notifId}-0h`);
+        FCM.cancelLocalNotification(`${notifId}+0.5h`);
+        FCM.cancelLocalNotification(`${notifId}+1h`);
     }
 
 }
