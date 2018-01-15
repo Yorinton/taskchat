@@ -134,6 +134,15 @@ class Backend {
         this.tasksRef.off();
     }
 
+    listenTaskDeleted(callback){
+        this.tasksRef = firebase.database().ref('tasks');
+
+        const listenDeleted = (dataSnapShot) => {
+            callback(dataSnapShot.val());
+        }
+        this.tasksRef.on('child_removed',listenDeleted);
+    }
+
     storeToken(token){
 
         //DB登録済みtoken読み込み
