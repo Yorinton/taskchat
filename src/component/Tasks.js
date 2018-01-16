@@ -95,21 +95,21 @@ export default class Tasks extends Component {
     componentDidMount(){
         this.readTasks();
     }
-    componentWillUpdate(){//新しいpropsかstateを受け取った時に呼ばれる
-        // Backend.listenTaskDeleted((task)=>{
-        //     //通知を削除
-        //     console.log('削除するタスクのid',task.id);
-        //     this.deleteScheduledNotif(task.id);
-        // });
+    // componentWillUpdate(){//新しいpropsかstateを受け取った時に呼ばれる
+    //     Backend.listenTaskDeleted((task)=>{
+    //         //通知を削除
+    //         console.log('削除するタスクのid',task.id);
+    //         this.deleteScheduledNotif(task.id);
+    //     });
 
-        // Backend.listenTaskDone((task)=>{
-        //     console.log(task.done);
-        //     if(task.done){
-        //         console.log('doneしたたスクid',task.id);
-        //         this.deleteScheduledNotif(task.id);
-        //     }
-        // });
-    }
+    //     Backend.listenTaskDone((task)=>{
+    //         console.log(task.done);
+    //         if(task.done){
+    //             console.log('doneしたたスクid',task.id);
+    //             this.deleteScheduledNotif(task.id);
+    //         }
+    //     });
+    // }
 
     // deleteScheduledNotif(notifId) {
     //     Notification.deleteScheduledNotif(notifId);

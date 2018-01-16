@@ -1,6 +1,6 @@
 import firebase from 'firebase';
 import CONFIG from './Config.js';
-
+import Notification from './Notification';
 
 class Backend {
 
@@ -82,7 +82,7 @@ class Backend {
     //タスク書き込み
     registerTask(task){
         this.tasksRef = firebase.database().ref('tasks');
-        this.tasksRef.off();//これをやらないとTasksコンポーネントのマウント前にsetStateが実行されてしまう
+        // this.tasksRef.off();//これをやらないとTasksコンポーネントのマウント前にsetStateが実行されてしまう
         this.tasksRef.push({
             id:task.id,
             task: task.text,
@@ -95,7 +95,7 @@ class Backend {
 
     readTasks(callback){
         this.tasksRef = firebase.database().ref('tasks');
-        this.tasksRef.off();
+        // this.tasksRef.off();
 
         const onReceive = (dataSnapShot) => {
             const tasks = dataSnapShot.val();
@@ -107,7 +107,7 @@ class Backend {
 
     readTasksLimit(callback,num){
         this.tasksRef = firebase.database().ref('tasks');
-        this.tasksRef.off();
+        // this.tasksRef.off();
 
         const onReceive = (dataSnapShot) => {
             const tasks = dataSnapShot.val();
@@ -119,37 +119,36 @@ class Backend {
 
     changeTaskStatus(key,isDone){
         const ref = `tasks/${key}`;
-        this.tasksRef = firebase.database().ref(ref);
 
-        this.tasksRef.update({done:isDone});
+        firebase.database().ref(ref).update({done:isDone});
 
-        this.tasksRef.off();
+        // this.tasksRef.off();
     }
 
     deleteTask(key){
         const ref = `tasks/${key}`;
-        this.tasksRef = firebase.database().ref(ref);
-
-        this.tasksRef.remove();
-        this.tasksRef.off();
+        firebase.database().ref(ref).remove();
+        // this.tasksRef.off();
     }
 
     //タスクの削除イベントをリッスン
-    listenTaskDeleted(callback){
+    listenTaskDeleted(){
         this.tasksRef = firebase.database().ref('tasks');
 
         const listenDeleted = (dataSnapShot) => {
-            callback(dataSnapShot.val());
+            console.log('削除するタスクのid',dataSnapShot.val().id);
+            Notification.deleteScheduledNotif(dataSnapShot.val().id);
         }
         this.tasksRef.on('child_removed',listenDeleted);
     }
 
     //タスクのdone(変更)イベントをリッスン
-    listenTaskDone(callback){
+    listenTaskDone(){
         this.tasksRef = firebase.database().ref('tasks');
 
         const listenDone = (dataSnapShot) => {
-            callback(dataSnapShot.val());
+            console.log('Doneしたタスクのid',dataSnapShot.val().id);
+            Notification.deleteScheduledNotif(dataSnapShot.val().id);
         }
         this.tasksRef.on('child_changed',listenDone);
     }
