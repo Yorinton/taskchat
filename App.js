@@ -34,6 +34,7 @@ import FCM from 'react-native-fcm';
 import {registerKilledListener, registerAppListener} from "./src/Listeners";
 import firebaseClient from "./src/FirebaseClient";
 import Backend from "./src/Backend";
+import Notification from './src/Notification'; 
 
 registerKilledListener();
 
@@ -53,6 +54,23 @@ export default class App extends Component<{}> {
   async componentDidMount() {
     //Listnerを登録
     registerAppListener();
+
+    //タスクの削除イベントをリッスン
+    Backend.listenTaskDeleted((task)=>{
+        //通知を削除
+        console.log('削除するタスクのid',task.id);
+        this.deleteScheduledNotif(task.id);
+    });
+
+    //タスクステータスの更新イベントをリッスン
+    Backend.listenTaskDone((task)=>{
+        console.log(task.done);
+        if(task.done){
+            console.log('doneしたたスクid',task.id);
+            this.deleteScheduledNotif(task.id);
+        }
+    });
+
 
     //初期通知を取得？通知をクリックしてアプリを起動した時に実行される
     //通知内容をinitNotif(初期通知)stateに設定
@@ -86,6 +104,10 @@ export default class App extends Component<{}> {
         console.log("APNS TOKEN (getFCMToken)", token);
       });
     }
+  }
+
+  deleteScheduledNotif(notifId) {
+      Notification.deleteScheduledNotif(notifId);
   }
 
   //ローカルの通知を表示

@@ -53,6 +53,7 @@ export default class TaskItem extends Component {
             </View>
         );
     }
+
 }
 
 const styles = StyleSheet.create({

@@ -30,7 +30,7 @@ export default class Tasks extends Component {
 
         Backend.deleteTask(key);
         //タスクに紐づくローカル通知を削除
-        this.deleteScheduledNotif(tasklist[index].id);
+        Notification.deleteScheduledNotif(tasklist[index].id);
         console.log('_delete内で指定したid',tasklist[index].id)
         //stateから削除したタスクに該当する要素を削除
         tasklist.splice(index,1);//keyがindexの要素を１つ削除する
@@ -43,7 +43,11 @@ export default class Tasks extends Component {
     _done = (index,key) => () => {
         const tasklist = [].concat(this.state.tasklist);
         tasklist[index].done = !tasklist[index].done;//keyがindexの要素のdoneの値(true/false)を反転させる
-
+        console.log(tasklist[index].done);
+        if(tasklist[index].done){
+            //タスクに紐づくローカル通知を削除
+            Notification.deleteScheduledNotif(tasklist[index].id);
+        }
         console.log(key);
         Backend.changeTaskStatus(key,tasklist[index].done);
 
@@ -92,16 +96,24 @@ export default class Tasks extends Component {
         this.readTasks();
     }
     componentWillUpdate(){//新しいpropsかstateを受け取った時に呼ばれる
-        Backend.listenTaskDeleted((task)=>{
-            //通知を削除
-            console.log('削除するタスクのid',task.id);
-            this.deleteScheduledNotif(task.id);
-        });
+        // Backend.listenTaskDeleted((task)=>{
+        //     //通知を削除
+        //     console.log('削除するタスクのid',task.id);
+        //     this.deleteScheduledNotif(task.id);
+        // });
+
+        // Backend.listenTaskDone((task)=>{
+        //     console.log(task.done);
+        //     if(task.done){
+        //         console.log('doneしたたスクid',task.id);
+        //         this.deleteScheduledNotif(task.id);
+        //     }
+        // });
     }
 
-    deleteScheduledNotif(notifId) {
-        Notification.deleteScheduledNotif(notifId);
-    }
+    // deleteScheduledNotif(notifId) {
+    //     Notification.deleteScheduledNotif(notifId);
+    // }
 
     readTasks(){
         Backend.readTasks((tasks)=>{
